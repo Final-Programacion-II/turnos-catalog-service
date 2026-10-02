@@ -1,0 +1,63 @@
+application {
+  config {
+    baseName catalog
+    packageName ar.edu.um.turnos.catalog
+    applicationType monolith
+    authenticationType jwt
+    buildTool maven
+    databaseType sql
+    prodDatabaseType postgresql
+    devDatabaseType postgresql
+    cacheProvider no
+    enableHibernateCache false
+    skipClient true
+    clientFramework no
+    skipUserManagement true
+    serviceDiscoveryType no
+    enableTranslation false
+    nativeLanguage es
+    serverPort 8081
+  }
+  entities *
+}
+
+enum Weekday {
+  MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+entity ProfessionalCategory {
+  externalId Long required unique
+  name String required
+  description String maxlength(1000)
+  enabled Boolean required
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity Professional {
+  externalId Long required unique
+  firstName String required
+  lastName String required
+  enabled Boolean required
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity WeeklySchedule {
+  externalId Long required unique
+  dayOfWeek Weekday required
+  startTime LocalTime required
+  endTime LocalTime required
+  slotDurationMinutes Integer required min(1)
+  enabled Boolean required
+  createdAt Instant
+  updatedAt Instant
+}
+
+relationship ManyToOne {
+  Professional{category(name) required} to ProfessionalCategory
+  WeeklySchedule{professional required} to Professional
+}
+
+dto * with mapstruct
+service * with serviceClass
