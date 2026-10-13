@@ -2,6 +2,7 @@ package ar.edu.um.turnos.catalog;
 
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongToAnyOf;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
@@ -31,6 +32,9 @@ class TechnicalStructureTest {
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
 
         .ignoreDependency(belongToAnyOf(CatalogApp.class), alwaysTrue())
+        // La sincronización es hexagonal y tiene sus propias reglas (SyncArchitectureTest).
+        .ignoreDependency(resideInAPackage("..sync.."), alwaysTrue())
+        .ignoreDependency(alwaysTrue(), resideInAPackage("..sync.."))
         .ignoreDependency(alwaysTrue(), belongToAnyOf(
             ar.edu.um.turnos.catalog.config.Constants.class,
             ar.edu.um.turnos.catalog.config.ApplicationProperties.class
