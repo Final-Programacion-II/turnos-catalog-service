@@ -3,7 +3,7 @@
 
 > Documento **generado automáticamente** por la cátedra de Programación II (UM): RepoSense + análisis de calidad de **7 dimensiones**. **No editar a mano**: se regenera en cada evaluación.
 > Rama evaluada: `main`. Análisis **heurístico** (regex + métricas) + build: es una criba para orientar la revisión, **no una nota**. La **documentación** del repositorio no se evalúa.
-> Generado: 2026-10-17.
+> Generado: 2026-10-19.
 
 ## 1. Veredicto
 
@@ -17,9 +17,10 @@
 | Clases | 102 |
 | Código dentro de clases (%POO) | 83% |
 | Funciones fuera de clases | 0 |
-| Duplicación | 31.3% |
+| Duplicación (puerta) | 10.2% |
+| Duplicación lógica | 10.9% |
+| Duplicación de boilerplate | 12.7% |
 | Cobertura | 68% |
-| Tope duro aplicado a D1 | `DUP>=30%` → D1 ≤ 30 |
 
 > Este informe **describe** lo que el análisis midió con los criterios ya establecidos de la materia. No es una nota.
 
@@ -217,8 +218,13 @@ El análisis encontró las siguientes señales (archivo, sin número de línea a
 - clase 'ProfessionalTestSamples' solo con métodos estáticos (¿utilitaria?) — `src/test/java/ar/edu/um/turnos/catalog/domain/ProfessionalTestSamples.java`
 - clase 'ProfessionalCategoryTestSamples' solo con métodos estáticos (¿utilitaria?) — `src/test/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategoryTestSamples.java`
 
-**duplicación** (1)
-- duplicación de bloques: 31.3% del código
+**duplicación** (6)
+- duplicación lógica: 10.2% · boilerplate: 12.7%
+- bloque de 8 líneas repetido 3 veces en src/test/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResourceIT.java:130, src/test/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResourceIT.java:372, src/test/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResourceIT.java:501 — `src/test/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResourceIT.java`
+- bloque de 8 líneas repetido 3 veces en src/test/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalCategoryResourceIT.java:523, src/test/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalResourceIT.java:583, src/test/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResourceIT.java:608 — `src/test/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalCategoryResourceIT.java`
+- bloque de 8 líneas repetido 3 veces en src/test/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalCategoryResourceIT.java:522, src/test/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalResourceIT.java:582, src/test/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResourceIT.java:607 — `src/test/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalCategoryResourceIT.java`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalCategoryDTO.java:64, src/main/java/ar/edu/um/turnos/catalog/service/dto/WeeklyScheduleDTO.java:92, src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalDTO.java:67 — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalCategoryDTO.java`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalCategoryDTO.java:72, src/main/java/ar/edu/um/turnos/catalog/service/dto/WeeklyScheduleDTO.java:100, src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalDTO.java:75 — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalCategoryDTO.java`
 
 **hexagonal** (18)
 - domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
@@ -257,7 +263,7 @@ xychart-beta
 | 1 | 2026-09-16 | `0602193` | Ing. Daniel Quinteros | 0 | 0 | 0% | 0.0% | 0 |
 | 2 | 2026-09-16 | `f9dc0a9` | Ing. Daniel Quinteros | 0 | 15 | 0% | 0.0% | 0 |
 | 3 | 2026-10-12 | `6e9665c` | Facundo Mangione | 0 | 15 | 0% | 0.0% | 0 |
-| 4 | 2026-10-16 | `e93585a` | Facundo Mangione | 6,583 | 43 | 83% | 31.3% | 0 |
+| 4 | 2026-10-16 | `e93585a` | Facundo Mangione | 6,583 | 43 | 83% | 10.2% | 0 |
 
 ---
 _Informe generado por la cátedra. Las dimensiones y umbrales corresponden a `calidad.py` (perfil `exigente`); el semáforo, a `CRITERIOS-CALIDAD.md`. La documentación del repositorio no se evalúa. Ante dudas, revisá el archivo señalado._
