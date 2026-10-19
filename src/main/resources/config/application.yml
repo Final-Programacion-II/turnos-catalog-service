@@ -216,3 +216,7 @@ jhipster:
 # ===================================================================
 
 # application:
+
+catedra:
+  base-url: ${CATEDRA_BASE_URL:}
+  token: ${CATEDRA_TOKEN:}
