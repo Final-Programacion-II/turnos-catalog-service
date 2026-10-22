@@ -9,11 +9,13 @@ import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalCategoryRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalRepository;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.sync.domain.CatalogChange;
 import ar.edu.um.turnos.catalog.sync.domain.CatalogSnapshot;
 import ar.edu.um.turnos.catalog.sync.ports.out.CatalogReplica;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -51,31 +53,54 @@ public class JpaCatalogReplica implements CatalogReplica {
         return syncStateRepository.findById(CatalogSyncState.SINGLETON_ID).map(CatalogSyncState::getCatalogVersion);
     }
 
+    // El snapshot es el catálogo completo: lo que no viene se deshabilita.
     @Override
     public void apply(CatalogSnapshot snapshot) {
-        Map<Long, ProfessionalCategory> categories = applyCategories(snapshot);
-        Map<Long, Professional> professionals = applyProfessionals(snapshot, categories);
-        applySchedules(snapshot, professionals);
+        save(snapshot.categories(), snapshot.professionals(), snapshot.schedules(), true);
 
         CatalogSyncState state = syncStateRepository.findById(CatalogSyncState.SINGLETON_ID).orElseThrow();
         state.setCatalogVersion(snapshot.version());
         state.setLastSyncedAt(Instant.now());
-
         LOG.info("Snapshot {} aplicado", snapshot.version());
     }
 
-    private Map<Long, ProfessionalCategory> applyCategories(CatalogSnapshot snapshot) {
-        Map<Long, ProfessionalCategory> byExternalId = new HashMap<>();
-        for (ProfessionalCategory category : categoryRepository.findAll()) {
-            byExternalId.put(category.getExternalId(), category);
+    // Un cambio trae solo lo que cambió: lo demás queda como está.
+    @Override
+    public void applyChange(CatalogChange change) {
+        CatalogSyncState state = syncStateRepository.findById(CatalogSyncState.SINGLETON_ID).orElseThrow();
+        Long current = state.getCatalogVersion();
+
+        if (current != null && current >= change.version()) {
+            LOG.info("La versión {} ya estaba aplicada", change.version());
+            return;
+        }
+        if (current == null || current != change.version() - 1) {
+            throw new IllegalStateException("No se puede aplicar la versión " + change.version() + " sobre la " + current);
         }
 
-        Set<Long> received = new HashSet<>();
-        for (CatalogSnapshot.Category item : snapshot.categories()) {
-            ProfessionalCategory category = byExternalId.get(item.id());
+        save(change.categories(), change.professionals(), change.schedules(), false);
+
+        state.setCatalogVersion(change.version());
+        state.setLastSyncedAt(Instant.now());
+        LOG.info("Cambio {} aplicado", change.version());
+    }
+
+    private void save(
+        List<CatalogSnapshot.Category> categoryItems,
+        List<CatalogSnapshot.Professional> professionalItems,
+        List<CatalogSnapshot.Schedule> scheduleItems,
+        boolean disableMissing
+    ) {
+        Map<Long, ProfessionalCategory> categories = new HashMap<>();
+        for (ProfessionalCategory category : categoryRepository.findAll()) {
+            categories.put(category.getExternalId(), category);
+        }
+        Set<Long> receivedCategories = new HashSet<>();
+        for (CatalogSnapshot.Category item : categoryItems) {
+            ProfessionalCategory category = categories.get(item.id());
             if (category == null) {
                 category = new ProfessionalCategory();
-                byExternalId.put(item.id(), category);
+                categories.put(item.id(), category);
             }
             category.setExternalId(item.id());
             category.setName(item.name());
@@ -84,34 +109,23 @@ public class JpaCatalogReplica implements CatalogReplica {
             category.setCreatedAt(item.createdAt());
             category.setUpdatedAt(item.updatedAt());
             categoryRepository.save(category);
-            received.add(item.id());
+            receivedCategories.add(item.id());
         }
 
-        for (ProfessionalCategory category : byExternalId.values()) {
-            if (!received.contains(category.getExternalId())) {
-                category.setEnabled(false);
-            }
-        }
-        return byExternalId;
-    }
-
-    private Map<Long, Professional> applyProfessionals(CatalogSnapshot snapshot, Map<Long, ProfessionalCategory> categories) {
-        Map<Long, Professional> byExternalId = new HashMap<>();
+        Map<Long, Professional> professionals = new HashMap<>();
         for (Professional professional : professionalRepository.findAll()) {
-            byExternalId.put(professional.getExternalId(), professional);
+            professionals.put(professional.getExternalId(), professional);
         }
-
-        Set<Long> received = new HashSet<>();
-        for (CatalogSnapshot.Professional item : snapshot.professionals()) {
+        Set<Long> receivedProfessionals = new HashSet<>();
+        for (CatalogSnapshot.Professional item : professionalItems) {
             ProfessionalCategory category = categories.get(item.categoryId());
             if (category == null) {
                 throw new IllegalStateException("El profesional " + item.id() + " tiene una categoría inexistente: " + item.categoryId());
             }
-
-            Professional professional = byExternalId.get(item.id());
+            Professional professional = professionals.get(item.id());
             if (professional == null) {
                 professional = new Professional();
-                byExternalId.put(item.id(), professional);
+                professionals.put(item.id(), professional);
             }
             professional.setExternalId(item.id());
             professional.setFirstName(item.firstName());
@@ -121,34 +135,23 @@ public class JpaCatalogReplica implements CatalogReplica {
             professional.setUpdatedAt(item.updatedAt());
             professional.setCategory(category);
             professionalRepository.save(professional);
-            received.add(item.id());
+            receivedProfessionals.add(item.id());
         }
 
-        for (Professional professional : byExternalId.values()) {
-            if (!received.contains(professional.getExternalId())) {
-                professional.setEnabled(false);
-            }
-        }
-        return byExternalId;
-    }
-
-    private void applySchedules(CatalogSnapshot snapshot, Map<Long, Professional> professionals) {
-        Map<Long, WeeklySchedule> byExternalId = new HashMap<>();
+        Map<Long, WeeklySchedule> schedules = new HashMap<>();
         for (WeeklySchedule schedule : scheduleRepository.findAll()) {
-            byExternalId.put(schedule.getExternalId(), schedule);
+            schedules.put(schedule.getExternalId(), schedule);
         }
-
-        Set<Long> received = new HashSet<>();
-        for (CatalogSnapshot.Schedule item : snapshot.schedules()) {
+        Set<Long> receivedSchedules = new HashSet<>();
+        for (CatalogSnapshot.Schedule item : scheduleItems) {
             Professional professional = professionals.get(item.professionalId());
             if (professional == null) {
                 throw new IllegalStateException("El horario " + item.id() + " tiene un profesional inexistente: " + item.professionalId());
             }
-
-            WeeklySchedule schedule = byExternalId.get(item.id());
+            WeeklySchedule schedule = schedules.get(item.id());
             if (schedule == null) {
                 schedule = new WeeklySchedule();
-                byExternalId.put(item.id(), schedule);
+                schedules.put(item.id(), schedule);
             }
             schedule.setExternalId(item.id());
             schedule.setDayOfWeek(Weekday.valueOf(item.dayOfWeek().name()));
@@ -160,12 +163,24 @@ public class JpaCatalogReplica implements CatalogReplica {
             schedule.setUpdatedAt(item.updatedAt());
             schedule.setProfessional(professional);
             scheduleRepository.save(schedule);
-            received.add(item.id());
+            receivedSchedules.add(item.id());
         }
 
-        for (WeeklySchedule schedule : byExternalId.values()) {
-            if (!received.contains(schedule.getExternalId())) {
-                schedule.setEnabled(false);
+        if (disableMissing) {
+            for (ProfessionalCategory category : categories.values()) {
+                if (!receivedCategories.contains(category.getExternalId())) {
+                    category.setEnabled(false);
+                }
+            }
+            for (Professional professional : professionals.values()) {
+                if (!receivedProfessionals.contains(professional.getExternalId())) {
+                    professional.setEnabled(false);
+                }
+            }
+            for (WeeklySchedule schedule : schedules.values()) {
+                if (!receivedSchedules.contains(schedule.getExternalId())) {
+                    schedule.setEnabled(false);
+                }
             }
         }
     }
