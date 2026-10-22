@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-// JSON de GET /api/synchronization/snapshot
+// JSON de GET /api/synchronization/snapshot. Los ítems tienen el mismo formato que en Redis.
 public record CatalogSnapshotResponse(
     Long snapshotVersion,
     List<CategoryItem> professionalCategories,
@@ -17,45 +17,27 @@ public record CatalogSnapshotResponse(
     public CatalogSnapshot toDomain() {
         List<CatalogSnapshot.Category> categories = new ArrayList<>();
         for (CategoryItem c : professionalCategories) {
-            categories.add(new CatalogSnapshot.Category(c.id(), c.name(), c.description(), c.enabled(), c.createdAt(), c.updatedAt()));
+            categories.add(c.toDomain());
         }
 
         List<CatalogSnapshot.Professional> professionalList = new ArrayList<>();
         for (ProfessionalItem p : professionals) {
-            professionalList.add(
-                new CatalogSnapshot.Professional(
-                    p.id(),
-                    p.categoryId(),
-                    p.firstName(),
-                    p.lastName(),
-                    p.enabled(),
-                    p.createdAt(),
-                    p.updatedAt()
-                )
-            );
+            professionalList.add(p.toDomain());
         }
 
         List<CatalogSnapshot.Schedule> schedules = new ArrayList<>();
         for (ScheduleItem s : weeklySchedules) {
-            schedules.add(
-                new CatalogSnapshot.Schedule(
-                    s.id(),
-                    s.professionalId(),
-                    s.dayOfWeek(),
-                    s.startTime(),
-                    s.endTime(),
-                    s.slotDurationMinutes(),
-                    s.enabled(),
-                    s.createdAt(),
-                    s.updatedAt()
-                )
-            );
+            schedules.add(s.toDomain());
         }
 
         return new CatalogSnapshot(snapshotVersion, categories, professionalList, schedules);
     }
 
-    public record CategoryItem(Long id, String name, String description, Boolean enabled, Instant createdAt, Instant updatedAt) {}
+    public record CategoryItem(Long id, String name, String description, Boolean enabled, Instant createdAt, Instant updatedAt) {
+        public CatalogSnapshot.Category toDomain() {
+            return new CatalogSnapshot.Category(id, name, description, enabled, createdAt, updatedAt);
+        }
+    }
 
     public record ProfessionalItem(
         Long id,
@@ -65,7 +47,11 @@ public record CatalogSnapshotResponse(
         Boolean enabled,
         Instant createdAt,
         Instant updatedAt
-    ) {}
+    ) {
+        public CatalogSnapshot.Professional toDomain() {
+            return new CatalogSnapshot.Professional(id, categoryId, firstName, lastName, enabled, createdAt, updatedAt);
+        }
+    }
 
     public record ScheduleItem(
         Long id,
@@ -77,5 +63,19 @@ public record CatalogSnapshotResponse(
         Boolean enabled,
         Instant createdAt,
         Instant updatedAt
-    ) {}
+    ) {
+        public CatalogSnapshot.Schedule toDomain() {
+            return new CatalogSnapshot.Schedule(
+                id,
+                professionalId,
+                dayOfWeek,
+                startTime,
+                endTime,
+                slotDurationMinutes,
+                enabled,
+                createdAt,
+                updatedAt
+            );
+        }
+    }
 }
