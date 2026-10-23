@@ -220,3 +220,7 @@ jhipster:
 catedra:
   base-url: ${CATEDRA_BASE_URL:}
   token: ${CATEDRA_TOKEN:}
+  kafka:
+    enabled: ${CATEDRA_KAFKA_ENABLED:true}
+    catalog-topic: ${CATEDRA_KAFKA_CATALOG_TOPIC:catedra.catalog.local}
+    group-id: ${CATEDRA_KAFKA_GROUP_ID:catalog-local}
