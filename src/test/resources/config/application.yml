@@ -97,3 +97,7 @@ management:
   health:
     mail:
       enabled: false
+
+catedra:
+  kafka:
+    enabled: false
