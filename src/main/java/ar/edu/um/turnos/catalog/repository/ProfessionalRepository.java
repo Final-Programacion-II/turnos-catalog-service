@@ -37,4 +37,23 @@ public interface ProfessionalRepository extends JpaRepository<Professional, Long
 
     @Query("select professional from Professional professional left join fetch professional.category where professional.id =:id")
     Optional<Professional> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        """
+        select p from Professional p join fetch p.category c
+        where (:categoryId is null or c.id = :categoryId)
+        and lower(concat(p.firstName, ' ', p.lastName)) like :namePattern
+        and (
+            :enabled is null
+            or (:enabled = true and p.enabled = true and c.enabled = true)
+            or (:enabled = false and (p.enabled = false or c.enabled = false))
+        )
+        order by p.lastName, p.firstName
+        """
+    )
+    List<Professional> search(
+        @Param("categoryId") Long categoryId,
+        @Param("namePattern") String namePattern,
+        @Param("enabled") Boolean enabled
+    );
 }

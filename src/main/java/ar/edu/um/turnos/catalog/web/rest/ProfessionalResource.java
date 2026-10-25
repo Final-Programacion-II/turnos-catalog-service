@@ -40,6 +40,24 @@ public class ProfessionalResource {
     }
 
     /**
+     * {@code GET  /professionals/search} : busca profesionales en la copia local.
+     *
+     * @param categoryId id local de la categoría (opcional).
+     * @param name parte del nombre o apellido, sin distinguir mayúsculas (opcional).
+     * @param enabled true para profesionales disponibles, false para dados de baja (opcional).
+     * @return la lista ordenada por apellido y nombre.
+     */
+    @GetMapping("/search")
+    public List<ProfessionalDTO> searchProfessionals(
+        @RequestParam(name = "categoryId", required = false) Long categoryId,
+        @RequestParam(name = "name", required = false) String name,
+        @RequestParam(name = "enabled", required = false) Boolean enabled
+    ) {
+        LOG.debug("REST request to search Professionals");
+        return professionalService.search(categoryId, name, enabled);
+    }
+
+    /**
      * {@code GET  /professionals/:id} : get the "id" professional.
      *
      * @param id the id of the professionalDTO to retrieve.
