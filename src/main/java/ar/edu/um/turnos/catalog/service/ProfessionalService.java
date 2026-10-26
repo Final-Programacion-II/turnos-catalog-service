@@ -6,6 +6,7 @@ import ar.edu.um.turnos.catalog.service.dto.ProfessionalDTO;
 import ar.edu.um.turnos.catalog.service.mapper.ProfessionalMapper;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -88,6 +89,18 @@ public class ProfessionalService {
     public List<ProfessionalDTO> findAll() {
         LOG.debug("Request to get all Professionals");
         return professionalRepository.findAll().stream().map(professionalMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Busca profesionales en la copia local. Los filtros en null no se aplican.
+     * "Habilitado" significa que el profesional y su categoría están habilitados.
+     */
+    @Transactional(readOnly = true)
+    public List<ProfessionalDTO> search(Long categoryId, String name, Boolean enabled) {
+        LOG.debug("Request to search Professionals : categoryId={}, name={}, enabled={}", categoryId, name, enabled);
+        // Se arma el patrón acá: si se manda un String null, PostgreSQL no sabe de qué tipo es y falla el lower()
+        String namePattern = name == null || name.isBlank() ? "%" : "%" + name.trim().toLowerCase(Locale.ROOT) + "%";
+        return professionalRepository.search(categoryId, namePattern, enabled).stream().map(professionalMapper::toDto).toList();
     }
 
     /**
