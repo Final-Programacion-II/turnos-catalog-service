@@ -1,6 +1,7 @@
 package ar.edu.um.turnos.catalog.repository;
 
 import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface WeeklyScheduleRepository extends JpaRepository<WeeklySchedule, Long> {}
+public interface WeeklyScheduleRepository extends JpaRepository<WeeklySchedule, Long> {
+    List<WeeklySchedule> findAllByEnabledTrue();
+}
