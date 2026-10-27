@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WeeklyScheduleRepository extends JpaRepository<WeeklySchedule, Long> {
     List<WeeklySchedule> findAllByEnabledTrue();
+
+    List<WeeklySchedule> findAllByProfessionalIdAndEnabledTrue(Long professionalId);
 }
