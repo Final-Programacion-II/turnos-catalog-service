@@ -1,7 +1,10 @@
 package ar.edu.um.turnos.catalog.web.rest;
 
+import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.service.ProfessionalService;
 import ar.edu.um.turnos.catalog.service.dto.ProfessionalDTO;
+import ar.edu.um.turnos.catalog.web.rest.errors.BadRequestAlertException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -18,6 +21,8 @@ import tech.jhipster.web.util.ResponseUtil;
 public class ProfessionalResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProfessionalResource.class);
+
+    private static final String ENTITY_NAME = "catalogProfessional";
 
     private final ProfessionalService professionalService;
 
@@ -45,16 +50,25 @@ public class ProfessionalResource {
      * @param categoryId id local de la categoría (opcional).
      * @param name parte del nombre o apellido, sin distinguir mayúsculas (opcional).
      * @param enabled true para profesionales disponibles, false para dados de baja (opcional).
+     * @param day día de la semana en que atiende, por ejemplo MONDAY (opcional).
+     * @param from hora desde, por ejemplo 09:00 (opcional).
+     * @param to hora hasta, por ejemplo 12:00 (opcional).
      * @return la lista ordenada por apellido y nombre.
      */
     @GetMapping("/search")
     public List<ProfessionalDTO> searchProfessionals(
         @RequestParam(name = "categoryId", required = false) Long categoryId,
         @RequestParam(name = "name", required = false) String name,
-        @RequestParam(name = "enabled", required = false) Boolean enabled
+        @RequestParam(name = "enabled", required = false) Boolean enabled,
+        @RequestParam(name = "day", required = false) Weekday day,
+        @RequestParam(name = "from", required = false) LocalTime from,
+        @RequestParam(name = "to", required = false) LocalTime to
     ) {
         LOG.debug("REST request to search Professionals");
-        return professionalService.search(categoryId, name, enabled);
+        if (from != null && to != null && !from.isBefore(to)) {
+            throw new BadRequestAlertException("La hora desde tiene que ser anterior a la hora hasta", ENTITY_NAME, "invalidtimerange");
+        }
+        return professionalService.search(categoryId, name, enabled, day, from, to);
     }
 
     /**

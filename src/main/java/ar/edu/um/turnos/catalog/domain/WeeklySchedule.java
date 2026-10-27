@@ -8,6 +8,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalTime;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 /**
  * A WeeklySchedule.
@@ -35,11 +37,15 @@ public class WeeklySchedule implements Serializable {
     @Column(name = "day_of_week", nullable = false)
     private Weekday dayOfWeek;
 
+    // Son horas de agenda (09:00 es 09:00 en cualquier lado): se guardan tal cual, sin pasarlas a UTC.
+    // Sin esto, hibernate.jdbc.time_zone las corre 3 horas y un horario que termina a las 21 queda guardado como 00:00.
     @NotNull
+    @JdbcTypeCode(SqlTypes.LOCAL_TIME)
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
     @NotNull
+    @JdbcTypeCode(SqlTypes.LOCAL_TIME)
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
