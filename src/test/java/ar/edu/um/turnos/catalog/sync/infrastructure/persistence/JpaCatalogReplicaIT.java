@@ -5,11 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
 import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
+import ar.edu.um.turnos.catalog.domain.Professional;
 import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalCategoryRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalRepository;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.sync.domain.CatalogChange;
 import ar.edu.um.turnos.catalog.sync.domain.CatalogSnapshot;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -57,9 +59,7 @@ class JpaCatalogReplicaIT {
 
     @Test
     void aplicaElSnapshot() {
-        replica.apply(
-            new CatalogSnapshot(7L, List.of(categoria(1L, "Clinica")), List.of(profesional(15L, 1L)), List.of(horario(21L, 15L)))
-        );
+        replica.apply(snapshotBase());
 
         assertThat(categoryRepository.count()).isEqualTo(1);
         assertThat(professionalRepository.count()).isEqualTo(1);
@@ -69,15 +69,8 @@ class JpaCatalogReplicaIT {
 
     @Test
     void aplicarDosVecesNoDuplica() {
-        CatalogSnapshot snapshot = new CatalogSnapshot(
-            7L,
-            List.of(categoria(1L, "Clinica")),
-            List.of(profesional(15L, 1L)),
-            List.of(horario(21L, 15L))
-        );
-
-        replica.apply(snapshot);
-        replica.apply(snapshot);
+        replica.apply(snapshotBase());
+        replica.apply(snapshotBase());
 
         assertThat(categoryRepository.count()).isEqualTo(1);
         assertThat(professionalRepository.count()).isEqualTo(1);
@@ -99,12 +92,61 @@ class JpaCatalogReplicaIT {
 
     @Test
     void conUnErrorNoGuardaNada() {
-        CatalogSnapshot roto = new CatalogSnapshot(7L, List.of(categoria(1L, "Clinica")), List.of(profesional(15L, 99L)), List.of());
+        CatalogSnapshot roto = new CatalogSnapshot(7L, List.of(categoria(1L, "Clinica")), List.of(profesional(15L, 99L, true)), List.of());
 
         assertThatThrownBy(() -> replica.apply(roto)).isInstanceOf(IllegalStateException.class);
 
         assertThat(categoryRepository.count()).isZero();
         assertThat(replica.currentVersion()).isEmpty();
+    }
+
+    // El cambio trae solo el profesional; su categoría ya estaba en la base.
+    @Test
+    void aplicaUnCambioSobreLaVersionAnterior() {
+        replica.apply(snapshotBase());
+
+        replica.applyChange(new CatalogChange(8L, List.of(), List.of(profesional(15L, 1L, false)), List.of()));
+
+        assertThat(professionalRepository.count()).isEqualTo(1);
+        Professional profesional = professionalRepository.findAll().get(0);
+        assertThat(profesional.getEnabled()).isFalse();
+        assertThat(replica.currentVersion()).contains(8L);
+    }
+
+    @Test
+    void unCambioNoDeshabilitaLoQueNoViene() {
+        replica.apply(new CatalogSnapshot(7L, List.of(categoria(1L, "Clinica"), categoria(2L, "Pediatria")), List.of(), List.of()));
+
+        replica.applyChange(new CatalogChange(8L, List.of(categoria(1L, "Clinica general")), List.of(), List.of()));
+
+        assertThat(buscarCategoria(1L).getName()).isEqualTo("Clinica general");
+        assertThat(buscarCategoria(2L).getEnabled()).isTrue();
+    }
+
+    @Test
+    void reaplicarUnCambioNoHaceNada() {
+        replica.apply(snapshotBase());
+        CatalogChange cambio = new CatalogChange(8L, List.of(categoria(1L, "Clinica general")), List.of(), List.of());
+
+        replica.applyChange(cambio);
+        replica.applyChange(cambio);
+
+        assertThat(categoryRepository.count()).isEqualTo(1);
+        assertThat(replica.currentVersion()).contains(8L);
+    }
+
+    @Test
+    void unCambioFueraDeOrdenFalla() {
+        replica.apply(snapshotBase());
+
+        assertThatThrownBy(() -> replica.applyChange(new CatalogChange(9L, List.of(), List.of(), List.of()))).isInstanceOf(
+            IllegalStateException.class
+        );
+        assertThat(replica.currentVersion()).contains(7L);
+    }
+
+    private CatalogSnapshot snapshotBase() {
+        return new CatalogSnapshot(7L, List.of(categoria(1L, "Clinica")), List.of(profesional(15L, 1L, true)), List.of(horario(21L, 15L)));
     }
 
     private ProfessionalCategory buscarCategoria(Long externalId) {
@@ -120,8 +162,8 @@ class JpaCatalogReplicaIT {
         return new CatalogSnapshot.Category(id, nombre, null, true, null, null);
     }
 
-    private CatalogSnapshot.Professional profesional(Long id, Long categoriaId) {
-        return new CatalogSnapshot.Professional(id, categoriaId, "Ana", "Gomez", true, null, null);
+    private CatalogSnapshot.Professional profesional(Long id, Long categoriaId, boolean habilitado) {
+        return new CatalogSnapshot.Professional(id, categoriaId, "Ana", "Gomez", habilitado, null, null);
     }
 
     private CatalogSnapshot.Schedule horario(Long id, Long profesionalId) {
