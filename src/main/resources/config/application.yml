@@ -224,3 +224,6 @@ catedra:
     enabled: ${CATEDRA_KAFKA_ENABLED:true}
     catalog-topic: ${CATEDRA_KAFKA_CATALOG_TOPIC:catedra.catalog.local}
     group-id: ${CATEDRA_KAFKA_GROUP_ID:catalog-local}
+  sync:
+    # Cada cuánto se compara la versión local con Redis, por si se perdió un aviso de Kafka
+    interval: ${CATEDRA_SYNC_INTERVAL:PT5M}
