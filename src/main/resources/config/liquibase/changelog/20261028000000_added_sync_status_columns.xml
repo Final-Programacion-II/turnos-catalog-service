@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20261028000000-1" author="facumangione">
+        <addColumn tableName="catalog_sync_state">
+            <column name="last_attempt_at" type="${datetimeType}"/>
+            <column name="last_error" type="varchar(1000)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -101,3 +101,6 @@ management:
 catedra:
   kafka:
     enabled: false
+  sync:
+    # En los tests la tarea periódica no tiene que dispararse sola
+    interval: PT24H
