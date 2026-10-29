@@ -52,3 +52,19 @@ turnos reenvía su token al catálogo.
 - App: Kotlin Multiplatform, con librerías a definir antes de empezar la app.
 - Secretos (JWT técnico, credenciales de Redis y Kafka) solo en variables de entorno,
   nunca en el repositorio.
+
+## 6. Las horas de la agenda se guardan sin zona horaria
+
+JHipster configura `hibernate.jdbc.time_zone: UTC`, que convierte todas las fechas y
+horas a UTC al guardarlas. Para los horarios de atención (`WeeklySchedule.startTime` y
+`endTime`) eso está mal: "atiende a las 9" es una hora de reloj, no un instante.
+Con la conversión, un horario de 18 a 21 quedaba guardado como 21 a 00 y no aparecía al
+buscar por la tarde.
+
+- Decisión: esas dos columnas usan `@JdbcTypeCode(SqlTypes.LOCAL_TIME)` y se guardan tal
+  cual. Las fechas de auditoría (`createdAt`, `updatedAt`) siguen en UTC, porque sí son
+  instantes.
+- Decisión: el filtro de disponibilidad compara las horas en Java y no en la consulta,
+  porque los parámetros de tipo hora también se convertían.
+- Descartado: sacar `hibernate.jdbc.time_zone` de toda la aplicación, porque los
+  `Instant` sí tienen que guardarse en UTC.

@@ -74,16 +74,38 @@ Kafka puede entregar el mismo mensaje más de una vez. Por eso:
 - Cada `eventId` procesado se guarda en la tabla `processed_catalog_event`. Si llega de nuevo, se ignora.
 - Además, si una versión ya está aplicada, aplicarla otra vez no cambia nada.
 
-| Qué pasa | Cómo se resuelve |
-| --- | --- |
-| Llega un mensaje repetido | Se ignora por el `eventId` |
-| Llega un aviso viejo | Ya estoy al día, no hace nada |
-| Se pierde un aviso | El próximo aviso aplica todas las versiones que falten |
-| Me atrasé demasiado | Se pide el snapshot |
-| La app estuvo apagada | Sincroniza sola al arrancar |
-| Falla Redis, la API o la base | Queda en el log y la versión no avanza |
+| Qué pasa                      | Cómo se resuelve                                       |
+| ----------------------------- | ------------------------------------------------------ |
+| Llega un mensaje repetido     | Se ignora por el `eventId`                             |
+| Llega un aviso viejo          | Ya estoy al día, no hace nada                          |
+| Se pierde un aviso            | El próximo aviso aplica todas las versiones que falten |
+| Me atrasé demasiado           | Se pide el snapshot                                    |
+| La app estuvo apagada         | Sincroniza sola al arrancar                            |
+| Falla Redis, la API o la base | Queda en el log y la versión no avanza                 |
 
-**Pendiente:** si la sincronización falla al procesar un aviso, ese aviso no se reintenta. El atraso se recupera con el siguiente aviso o al reiniciar. Para no depender de eso, voy a agregar una sincronización periódica y un endpoint que muestre el estado y el último error.
+Además, una sola sincronización corre a la vez: si Kafka y la tarea periódica disparan juntas, la segunda espera y, cuando entra, ya encuentra la copia al día.
+
+## Respaldo periódico y estado
+
+Si la sincronización que dispara un aviso de Kafka falla, ese aviso no se vuelve a leer. Para no depender del próximo aviso, cada 5 minutos (`CATEDRA_SYNC_INTERVAL`) se vuelve a comparar la versión local con Redis. Si no hay nada nuevo, no hace nada.
+
+Cada intento, venga del arranque, de Kafka o de la tarea periódica, queda guardado en `catalog_sync_state` y se puede consultar:
+
+```
+GET /api/catalog/sync-status
+```
+
+```json
+{
+  "status": "OK",
+  "catalogVersion": 1,
+  "lastSyncedAt": "2026-10-28T18:55:10Z",
+  "lastAttemptAt": "2026-10-28T18:55:10Z",
+  "lastError": null
+}
+```
+
+`status` vale `NOT_SYNCED` si todavía no hay versión local, `ERROR` si el último intento falló y `OK` en otro caso. Si falla, la copia local no se toca: se sigue buscando con la última versión buena.
 
 ## Dónde está en el código
 
@@ -95,6 +117,8 @@ Todo está en el paquete `sync` (ver [ADR 0001](adr/0001-sincronizacion-hexagona
 - `JpaCatalogReplica`: guarda en PostgreSQL.
 - `CatalogUpdatedListener`: escucha Kafka.
 - `CatalogSyncOnStartup`: sincroniza al arrancar.
+- `CatalogSyncScheduler`: sincroniza cada 5 minutos como respaldo.
+- `RecordingCatalogSync`: envuelve la sincronización, guarda cómo terminó cada intento y evita que corran dos a la vez.
 
 La versión local está en la tabla `catalog_sync_state`.
 
@@ -108,8 +132,9 @@ Para correr los tests:
 ./mvnw verify
 ```
 
-## Prueba contra la cátedra (23/10)
+## Prueba contra la cátedra
 
-- Con la base vacía cargó el snapshot: versión 1, con 8 categorías, 24 profesionales y 44 horarios.
-- Al reiniciar leyó la versión de Redis y vio que ya estaba al día.
-- Kafka quedó suscripto al topic asignado.
+- **23/10:** con la base vacía cargó el snapshot: versión 1, con 8 categorías, 24 profesionales y 44 horarios. Kafka quedó suscripto al topic asignado.
+- **28/10:** con Redis apuntando a un puerto equivocado, la sincronización falla al conectarse (`Unable to connect to Redis`) y el estado pasa a `ERROR` sin tocar la copia. Con Redis bien configurado lee las versiones y ve que está al día. Al volver, el estado se recupera a `OK`.
+
+La prueba de Redis del 23/10 no servía: en ese momento la lógica incremental todavía no estaba en `main` y el servicio no consultaba Redis, aunque el log decía lo mismo. Por eso se repitió forzando un error.
