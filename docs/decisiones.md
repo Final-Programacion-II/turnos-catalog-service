@@ -68,3 +68,16 @@ buscar por la tarde.
   porque los parámetros de tipo hora también se convertían.
 - Descartado: sacar `hibernate.jdbc.time_zone` de toda la aplicación, porque los
   `Instant` sí tienen que guardarse en UTC.
+
+## 7. Contraseñas con Argon2id
+
+Las contraseñas se guardan con Argon2id (`Argon2PasswordEncoder` de Spring Security).
+
+- Motivo: bcrypt hace lento cada intento, pero usa muy poca memoria, así que una GPU
+  puede probar miles en paralelo. Argon2id obliga a usar memoria en cada intento
+  (16 MiB con la configuración de Spring), lo que limita ese paralelismo. Es la primera
+  recomendación de OWASP para guardar contraseñas.
+- En el catálogo solo afecta al usuario de ejemplo del perfil de desarrollo. En turnos,
+  donde se registran los usuarios finales, se usa desde el principio.
+- Descartado: bcrypt, que sigue siendo aceptable pero quedó como opción para sistemas
+  que ya lo usan.
