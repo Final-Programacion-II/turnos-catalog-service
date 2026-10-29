@@ -52,3 +52,32 @@ turnos reenvía su token al catálogo.
 - App: Kotlin Multiplatform, con librerías a definir antes de empezar la app.
 - Secretos (JWT técnico, credenciales de Redis y Kafka) solo en variables de entorno,
   nunca en el repositorio.
+
+## 6. Las horas de la agenda se guardan sin zona horaria
+
+JHipster configura `hibernate.jdbc.time_zone: UTC`, que convierte todas las fechas y
+horas a UTC al guardarlas. Para los horarios de atención (`WeeklySchedule.startTime` y
+`endTime`) eso está mal: "atiende a las 9" es una hora de reloj, no un instante.
+Con la conversión, un horario de 18 a 21 quedaba guardado como 21 a 00 y no aparecía al
+buscar por la tarde.
+
+- Decisión: esas dos columnas usan `@JdbcTypeCode(SqlTypes.LOCAL_TIME)` y se guardan tal
+  cual. Las fechas de auditoría (`createdAt`, `updatedAt`) siguen en UTC, porque sí son
+  instantes.
+- Decisión: el filtro de disponibilidad compara las horas en Java y no en la consulta,
+  porque los parámetros de tipo hora también se convertían.
+- Descartado: sacar `hibernate.jdbc.time_zone` de toda la aplicación, porque los
+  `Instant` sí tienen que guardarse en UTC.
+
+## 7. Contraseñas con Argon2id
+
+Las contraseñas se guardan con Argon2id (`Argon2PasswordEncoder` de Spring Security).
+
+- Motivo: bcrypt hace lento cada intento, pero usa muy poca memoria, así que una GPU
+  puede probar miles en paralelo. Argon2id obliga a usar memoria en cada intento
+  (16 MiB con la configuración de Spring), lo que limita ese paralelismo. Es la primera
+  recomendación de OWASP para guardar contraseñas.
+- En el catálogo solo afecta al usuario de ejemplo del perfil de desarrollo. En turnos,
+  donde se registran los usuarios finales, se usa desde el principio.
+- Descartado: bcrypt, que sigue siendo aceptable pero quedó como opción para sistemas
+  que ya lo usan.
