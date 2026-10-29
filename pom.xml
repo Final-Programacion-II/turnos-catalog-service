@@ -60,7 +60,22 @@
         <spotless-maven-plugin.version>3.8.0</spotless-maven-plugin.version>
         <spring.profiles.active>dev</spring.profiles.active>
         <springdoc-openapi-starter-webmvc-api.version>3.0.3</springdoc-openapi-starter-webmvc-api.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!--
+                    liquibase-core pide commons-text 1.15.0 y opencsv (que viene dentro de liquibase) pide la 1.13.1.
+                    Maven ya elegía la 1.15.0; fijarla acá hace explícita la elección y saca el aviso del enforcer.
+                -->
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>1.15.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -70,6 +85,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <!-- Argon2PasswordEncoder de Spring Security usa la implementación de Bouncy Castle -->
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>tech.jhipster</groupId>
