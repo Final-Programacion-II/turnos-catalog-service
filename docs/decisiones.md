@@ -42,6 +42,13 @@ turnos reenvía su token al catálogo.
   a un usuario.
 - Descartado: un token técnico interno entre servicios. Se reconsidera si aparece
   alguna llamada que no dependa de un usuario.
+- Cómo se valida: los dos servicios firman y validan los JWT con el mismo secreto
+  (HMAC), configurado con la variable `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64SECRET`.
+  El catálogo verifica firma y vencimiento del token que le llega, igual que si lo
+  hubiera emitido él. Si el secreto no coincide, responde 401.
+- Limitación: con un secreto compartido, cualquiera de los dos servicios puede emitir
+  tokens válidos para el otro. Por eso el login de ejemplo del catálogo (`admin/admin`
+  del perfil dev) se tiene que sacar antes de la entrega.
 
 ## 5. Stack
 
