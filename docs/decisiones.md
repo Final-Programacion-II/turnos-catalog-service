@@ -42,6 +42,13 @@ turnos reenvía su token al catálogo.
   a un usuario.
 - Descartado: un token técnico interno entre servicios. Se reconsidera si aparece
   alguna llamada que no dependa de un usuario.
+- Cómo se valida: los dos servicios firman y validan los JWT con el mismo secreto
+  (HMAC), configurado con la variable `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64SECRET`.
+  El catálogo verifica firma y vencimiento del token que le llega, igual que si lo
+  hubiera emitido él. Si el secreto no coincide, responde 401.
+- Limitación: con un secreto compartido, cualquiera de los dos servicios puede emitir
+  tokens válidos para el otro. Por eso el catálogo no emite tokens: se sacó su login de
+  ejemplo (`admin/admin` del perfil dev). Ver el punto 8.
 
 ## 5. Stack
 
@@ -71,6 +78,9 @@ buscar por la tarde.
 
 ## 7. Contraseñas con Argon2id
 
+> Desde el punto 8 el catálogo no tiene usuarios, así que esta decisión ya no aplica acá.
+> Sigue vigente en turnos, donde se registran los usuarios finales.
+
 Las contraseñas se guardan con Argon2id (`Argon2PasswordEncoder` de Spring Security).
 
 - Motivo: bcrypt hace lento cada intento, pero usa muy poca memoria, así que una GPU
@@ -81,3 +91,17 @@ Las contraseñas se guardan con Argon2id (`Argon2PasswordEncoder` de Spring Secu
   donde se registran los usuarios finales, se usa desde el principio.
 - Descartado: bcrypt, que sigue siendo aceptable pero quedó como opción para sistemas
   que ya lo usan.
+
+## 8. El catálogo no tiene login
+
+Se sacaron el `POST /api/authenticate` y el usuario en memoria (`admin/admin` en desarrollo,
+`test/test` en los tests). El catálogo ya no emite tokens: solo valida los que emite turnos.
+Queda el `GET /api/authenticate`, que responde si el token del pedido es válido.
+
+- Motivo: los dos servicios comparten el secreto de los JWT (punto 4). Un token emitido por el
+  catálogo para `admin`, con rol `ADMIN`, también era válido en turnos, y le daba acceso a la
+  administración de usuarios. Además, la contraseña de ese usuario es pública.
+- Con esto también se va Argon2 del catálogo (punto 7) y la dependencia de Bouncy Castle.
+- Descartado: dejar el login solo en el perfil de desarrollo. Sigue siendo una forma de crear
+  tokens válidos para turnos, y el perfil de desarrollo usa el mismo secreto que se configure.
+

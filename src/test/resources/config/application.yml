@@ -29,11 +29,6 @@ spring:
   messages:
     basename: i18n/messages
   security:
-    user:
-      name: test
-      password: test
-      roles:
-        - USER
     oauth2:
       resourceserver:
         jwt:

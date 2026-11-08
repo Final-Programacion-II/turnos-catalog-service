@@ -1,17 +1,11 @@
 package ar.edu.um.turnos.catalog.web.rest;
 
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.web.rest.vm.LoginVM;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -19,56 +13,32 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * Integration tests for the {@link AuthenticateController} REST controller.
+ * El catálogo no emite tokens: los usuarios inician sesión en turnos (ver docs/decisiones.md, punto 8).
  */
 @AutoConfigureMockMvc
 @IntegrationTest
 class AuthenticateControllerIT {
 
-    @Autowired
-    private ObjectMapper om;
+    private static final String LOGIN = "{ \"username\": \"admin\", \"password\": \"admin\" }";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void testAuthorize() throws Exception {
-        LoginVM login = new LoginVM();
-        login.setUsername("test");
-        login.setPassword("test");
+    void elLoginDeEjemploYaNoExiste() throws Exception {
+        // Sin token, el pedido ni siquiera llega: todo /api pide un JWT
         mockMvc
-            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id_token").isString())
-            .andExpect(jsonPath("$.id_token").isNotEmpty())
-            .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(is(emptyString()))));
-    }
-
-    @Test
-    void testAuthorizeWithRememberMe() throws Exception {
-        LoginVM login = new LoginVM();
-        login.setUsername("test");
-        login.setPassword("test");
-        login.setRememberMe(true);
-        mockMvc
-            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id_token").isString())
-            .andExpect(jsonPath("$.id_token").isNotEmpty())
-            .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(is(emptyString()))));
-    }
-
-    @Test
-    void testAuthorizeFails() throws Exception {
-        LoginVM login = new LoginVM();
-        login.setUsername("wrong-user");
-        login.setPassword("wrong password");
-        mockMvc
-            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.id_token").doesNotExist())
+            .andExpect(header().doesNotExist("Authorization"));
+    }
+
+    @Test
+    void conUnTokenValidoTampocoSeEmiteOtro() throws Exception {
+        // Con token llega al controlador, pero ya no hay un POST que devuelva un JWT nuevo
+        mockMvc
+            .perform(post("/api/authenticate").with(jwt()).contentType(MediaType.APPLICATION_JSON).content(LOGIN))
+            .andExpect(status().isMethodNotAllowed())
             .andExpect(header().doesNotExist("Authorization"));
     }
 }
