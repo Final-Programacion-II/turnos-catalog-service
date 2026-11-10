@@ -136,5 +136,6 @@ Para correr los tests:
 
 - **23/10:** con la base vacía cargó el snapshot: versión 1, con 8 categorías, 24 profesionales y 44 horarios. Kafka quedó suscripto al topic asignado.
 - **28/10:** con Redis apuntando a un puerto equivocado, la sincronización falla al conectarse (`Unable to connect to Redis`) y el estado pasa a `ERROR` sin tocar la copia. Con Redis bien configurado lee las versiones y ve que está al día. Al volver, el estado se recupera a `OK`.
+- **9/11:** con el sistema completo en Docker, después de unas 40 horas corriendo, el catálogo siguió los cambios de la cátedra con los avisos de Kafka. En el log se ve cada aviso procesado y la versión aplicada (por ejemplo `Evento 29578350-… procesado, réplica en la versión 127`). Un aviso puede traer más de una versión de atraso (`Réplica actualizada de la versión 124 a la 126`): se aplican todas en orden porque el listener compara contra Redis y no contra el número del mensaje. `GET /api/catalog/sync-status` quedó en `OK` con la versión 127.
 
 La prueba de Redis del 23/10 no servía: en ese momento la lógica incremental todavía no estaba en `main` y el servicio no consultaba Redis, aunque el log decía lo mismo. Por eso se repitió forzando un error.
