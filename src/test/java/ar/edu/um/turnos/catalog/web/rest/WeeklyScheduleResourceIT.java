@@ -1,7 +1,5 @@
 package ar.edu.um.turnos.catalog.web.rest;
 
-import static ar.edu.um.turnos.catalog.domain.WeeklyScheduleAsserts.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -11,8 +9,6 @@ import ar.edu.um.turnos.catalog.domain.Professional;
 import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
 import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
-import ar.edu.um.turnos.catalog.service.mapper.WeeklyScheduleMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -65,13 +61,7 @@ class WeeklyScheduleResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     @Autowired
-    private ObjectMapper om;
-
-    @Autowired
     private WeeklyScheduleRepository weeklyScheduleRepository;
-
-    @Autowired
-    private WeeklyScheduleMapper weeklyScheduleMapper;
 
     @Autowired
     private EntityManager em;
@@ -195,7 +185,9 @@ class WeeklyScheduleResourceIT {
             .andExpect(jsonPath("$.slotDurationMinutes").value(DEFAULT_SLOT_DURATION_MINUTES))
             .andExpect(jsonPath("$.enabled").value(DEFAULT_ENABLED))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
-            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
+            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()))
+            // Del profesional viaja solo el id
+            .andExpect(jsonPath("$.professional.id").value(weeklySchedule.getProfessional().getId().intValue()));
     }
 
     @Test
@@ -203,33 +195,5 @@ class WeeklyScheduleResourceIT {
     void getNonExistingWeeklySchedule() throws Exception {
         // Get the weeklySchedule
         restWeeklyScheduleMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
-    }
-
-    protected long getRepositoryCount() {
-        return weeklyScheduleRepository.count();
-    }
-
-    protected void assertIncrementedRepositoryCount(long countBefore) {
-        assertThat(countBefore + 1).isEqualTo(getRepositoryCount());
-    }
-
-    protected void assertDecrementedRepositoryCount(long countBefore) {
-        assertThat(countBefore - 1).isEqualTo(getRepositoryCount());
-    }
-
-    protected void assertSameRepositoryCount(long countBefore) {
-        assertThat(countBefore).isEqualTo(getRepositoryCount());
-    }
-
-    protected WeeklySchedule getPersistedWeeklySchedule(WeeklySchedule weeklySchedule) {
-        return weeklyScheduleRepository.findById(weeklySchedule.getId()).orElseThrow();
-    }
-
-    protected void assertPersistedWeeklyScheduleToMatchAllProperties(WeeklySchedule expectedWeeklySchedule) {
-        assertWeeklyScheduleAllPropertiesEquals(expectedWeeklySchedule, getPersistedWeeklySchedule(expectedWeeklySchedule));
-    }
-
-    protected void assertPersistedWeeklyScheduleToMatchUpdatableProperties(WeeklySchedule expectedWeeklySchedule) {
-        assertWeeklyScheduleAllUpdatablePropertiesEquals(expectedWeeklySchedule, getPersistedWeeklySchedule(expectedWeeklySchedule));
     }
 }

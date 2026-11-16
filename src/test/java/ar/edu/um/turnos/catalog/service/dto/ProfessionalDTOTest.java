@@ -2,23 +2,55 @@ package ar.edu.um.turnos.catalog.service.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ar.edu.um.turnos.catalog.web.rest.TestUtil;
+import ar.edu.um.turnos.catalog.domain.Professional;
+import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
 class ProfessionalDTOTest {
 
+    private static final Instant CREADO = Instant.parse("2026-10-23T14:02:11Z");
+    private static final Instant ACTUALIZADO = Instant.parse("2026-11-08T21:00:03Z");
+
     @Test
-    void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProfessionalDTO.class);
-        ProfessionalDTO professionalDTO1 = new ProfessionalDTO();
-        professionalDTO1.setId(1L);
-        ProfessionalDTO professionalDTO2 = new ProfessionalDTO();
-        assertThat(professionalDTO1).isNotEqualTo(professionalDTO2);
-        professionalDTO2.setId(professionalDTO1.getId());
-        assertThat(professionalDTO1).isEqualTo(professionalDTO2);
-        professionalDTO2.setId(2L);
-        assertThat(professionalDTO1).isNotEqualTo(professionalDTO2);
-        professionalDTO1.setId(null);
-        assertThat(professionalDTO1).isNotEqualTo(professionalDTO2);
+    void copiaLosDatosDelProfesionalYDeLaCategoriaSoloIdYNombre() {
+        ProfessionalCategory categoria = new ProfessionalCategory();
+        categoria.setId(1003L);
+        categoria.setExternalId(4L);
+        categoria.setName("Ginecologia");
+        categoria.setDescription("No viaja en el profesional");
+
+        Professional profesional = new Professional();
+        profesional.setId(1067L);
+        profesional.setExternalId(218L);
+        profesional.setFirstName("Romina");
+        profesional.setLastName("Acosta");
+        profesional.setEnabled(true);
+        profesional.setCreatedAt(CREADO);
+        profesional.setUpdatedAt(ACTUALIZADO);
+        profesional.setCategory(categoria);
+
+        ProfessionalDTO dto = ProfessionalDTO.from(profesional);
+
+        assertThat(dto).isEqualTo(
+            new ProfessionalDTO(
+                1067L,
+                218L,
+                "Romina",
+                "Acosta",
+                true,
+                CREADO,
+                ACTUALIZADO,
+                new ProfessionalDTO.Category(1003L, "Ginecologia")
+            )
+        );
+    }
+
+    @Test
+    void sinCategoriaNoFalla() {
+        Professional profesional = new Professional();
+        profesional.setId(1067L);
+
+        assertThat(ProfessionalDTO.from(profesional).category()).isNull();
     }
 }
