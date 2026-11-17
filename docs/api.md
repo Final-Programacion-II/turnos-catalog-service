@@ -37,17 +37,11 @@ Devuelve todos los profesionales, habilitados o no, con su categoría. Ejemplo d
   "enabled": true,
   "createdAt": "2026-10-23T14:02:11Z",
   "updatedAt": "2026-11-08T21:00:03Z",
-  "category": {
-    "id": 1003,
-    "externalId": 4,
-    "name": "Ginecologia",
-    "description": "...",
-    "enabled": true,
-    "createdAt": "2026-10-23T14:02:11Z",
-    "updatedAt": "2026-10-23T14:02:11Z"
-  }
+  "category": { "id": 1003, "name": "Ginecologia" }
 }
 ```
+
+De la categoría vienen solo el id y el nombre. El resto está en `/api/professional-categories/{id}`.
 
 ### Buscar
 
@@ -134,9 +128,11 @@ Devuelven todos los horarios (habilitados o no) o uno por id (**404** si no exis
   "enabled": true,
   "createdAt": "2026-10-23T14:02:11Z",
   "updatedAt": "2026-10-23T14:02:11Z",
-  "professional": { "id": 1067, "...": "..." }
+  "professional": { "id": 1067 }
 }
 ```
+
+Del profesional viene solo el id. El resto está en `/api/professionals/{id}`.
 
 Un horario dice "los martes de 13 a 16, turnos de 30 minutos". Los turnos concretos de una fecha
 no los calcula el catálogo: los calcula turnos con la agenda y las ocupaciones de la cátedra.

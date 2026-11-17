@@ -1,7 +1,5 @@
 package ar.edu.um.turnos.catalog.web.rest;
 
-import static ar.edu.um.turnos.catalog.domain.ProfessionalCategoryAsserts.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -9,8 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ar.edu.um.turnos.catalog.IntegrationTest;
 import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
 import ar.edu.um.turnos.catalog.repository.ProfessionalCategoryRepository;
-import ar.edu.um.turnos.catalog.service.mapper.ProfessionalCategoryMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import org.junit.jupiter.api.AfterEach;
@@ -53,13 +49,7 @@ class ProfessionalCategoryResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     @Autowired
-    private ObjectMapper om;
-
-    @Autowired
     private ProfessionalCategoryRepository professionalCategoryRepository;
-
-    @Autowired
-    private ProfessionalCategoryMapper professionalCategoryMapper;
 
     @Autowired
     private EntityManager em;
@@ -161,39 +151,5 @@ class ProfessionalCategoryResourceIT {
     void getNonExistingProfessionalCategory() throws Exception {
         // Get the professionalCategory
         restProfessionalCategoryMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
-    }
-
-    protected long getRepositoryCount() {
-        return professionalCategoryRepository.count();
-    }
-
-    protected void assertIncrementedRepositoryCount(long countBefore) {
-        assertThat(countBefore + 1).isEqualTo(getRepositoryCount());
-    }
-
-    protected void assertDecrementedRepositoryCount(long countBefore) {
-        assertThat(countBefore - 1).isEqualTo(getRepositoryCount());
-    }
-
-    protected void assertSameRepositoryCount(long countBefore) {
-        assertThat(countBefore).isEqualTo(getRepositoryCount());
-    }
-
-    protected ProfessionalCategory getPersistedProfessionalCategory(ProfessionalCategory professionalCategory) {
-        return professionalCategoryRepository.findById(professionalCategory.getId()).orElseThrow();
-    }
-
-    protected void assertPersistedProfessionalCategoryToMatchAllProperties(ProfessionalCategory expectedProfessionalCategory) {
-        assertProfessionalCategoryAllPropertiesEquals(
-            expectedProfessionalCategory,
-            getPersistedProfessionalCategory(expectedProfessionalCategory)
-        );
-    }
-
-    protected void assertPersistedProfessionalCategoryToMatchUpdatableProperties(ProfessionalCategory expectedProfessionalCategory) {
-        assertProfessionalCategoryAllUpdatablePropertiesEquals(
-            expectedProfessionalCategory,
-            getPersistedProfessionalCategory(expectedProfessionalCategory)
-        );
     }
 }

@@ -31,15 +31,12 @@ public class ProfessionalResource {
     }
 
     /**
-     * {@code GET  /professionals} : get all the Professionals.
+     * {@code GET  /professionals} : todos los profesionales de la copia local, con su categoría.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Professionals in body.
+     * @return 200 con la lista.
      */
     @GetMapping("")
-    public List<ProfessionalDTO> getAllProfessionals(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
-    ) {
+    public List<ProfessionalDTO> getAllProfessionals() {
         LOG.debug("REST request to get all Professionals");
         return professionalService.findAll();
     }

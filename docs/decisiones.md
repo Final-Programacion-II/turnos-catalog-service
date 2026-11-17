@@ -105,3 +105,23 @@ Queda el `GET /api/authenticate`, que responde si el token del pedido es válido
 - Descartado: dejar el login solo en el perfil de desarrollo. Sigue siendo una forma de crear
   tokens válidos para turnos, y el perfil de desarrollo usa el mismo secreto que se configure.
 
+## 9. Servicios de solo lectura y DTO como `record`
+
+Desde que el catálogo es de solo lectura no hay endpoints para crear, modificar ni borrar.
+Pero quedaba el código que JHipster genera para eso: métodos `save`, `update`, `partialUpdate`
+y `delete` en los servicios, y los mappers de MapStruct con la conversión de DTO a entidad.
+Nadie lo llamaba y no tenía tests.
+
+- Decisión: los servicios de categorías, profesionales y horarios quedan solo con consultas
+  (`@Transactional(readOnly = true)`).
+- Decisión: los DTO son `record` con un método `from(entidad)`. Un `record` no se puede
+  modificar después de creado, que es lo que corresponde a una respuesta de solo lectura.
+- Con eso se va MapStruct: la única conversión que queda es de entidad a DTO, y escrita a mano
+  son unas pocas líneas que se leen y se prueban directo (`ProfessionalDTOTest`,
+  `WeeklyScheduleDTOTest`).
+- En un profesional, de la categoría viajan solo el id y el nombre; en un horario, del
+  profesional viaja solo el id. Antes viajaba el objeto completo con los demás campos en
+  `null`.
+- Descartado: dejar el código de escritura "por si hace falta". La copia local solo la
+  modifica la sincronización (`JpaCatalogReplica`); un `save` suelto en un servicio sería una
+  segunda forma de escribir, sin las reglas de versiones.
