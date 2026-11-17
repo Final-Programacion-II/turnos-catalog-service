@@ -125,3 +125,17 @@ Nadie lo llamaba y no tenía tests.
 - Descartado: dejar el código de escritura "por si hace falta". La copia local solo la
   modifica la sincronización (`JpaCatalogReplica`); un `save` suelto en un servicio sería una
   segunda forma de escribir, sin las reglas de versiones.
+
+## 10. Chequeo de salud de Redis desactivado y Compose propio
+
+- `/management/health` daba siempre `DOWN` (503) aunque el servicio funcionara. El chequeo de
+  Redis que trae Spring usa un comando que el usuario de Redis de la cátedra no tiene
+  permitido, y ese chequeo forma parte del estado general.
+- Decisión: se desactiva (`management.health.redis.enabled: false`). Si Redis no responde, se
+  ve donde corresponde: `GET /api/catalog/sync-status` pasa a `ERROR` con el motivo.
+- Descartado: escribir un chequeo propio que lea una clave de Redis. Sería repetir lo que ya
+  informa el estado de la sincronización.
+- El catálogo tiene su propio `docker/compose.yml` (el servicio y su base) para poder probarlo
+  solo. El del sistema completo sigue en el repo de turnos.
+- Las claves de Redis de la cátedra quedaron como constantes con nombre en
+  `RedisCatalogChangeSource`, en lugar de armarse concatenando texto en cada llamada.

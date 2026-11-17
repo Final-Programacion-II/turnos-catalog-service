@@ -1,4 +1,5 @@
 <!-- calidad:inicio -->
+
 ![Calidad](https://img.shields.io/badge/Calidad-56%2F100-yellow) ![Aprobar](https://img.shields.io/badge/Aprobar-no-red) ![Destacar](https://img.shields.io/badge/Destacar-no-lightgrey) ![Build](https://img.shields.io/badge/Build-OK-green) ![Duplicación](https://img.shields.io/badge/Duplicaci%C3%B3n-4.3%25-orange) ![%POO](https://img.shields.io/badge/%25POO-78%25-yellow) ![Sueltas](https://img.shields.io/badge/Sueltas-0-green) ![D1](https://img.shields.io/badge/D1-4-red) ![D2](https://img.shields.io/badge/D2-0-red) ![D4](https://img.shields.io/badge/D4-80-green) ![D5](https://img.shields.io/badge/D5-100-green) ![D6](https://img.shields.io/badge/D6-100-green) ![D7](https://img.shields.io/badge/D7-77-yellow)
 
 **Calidad (heurístico, 7 dimensiones):** índice **56/100** · build **OK** · aprobar **no (5/11)** · destacar **no**
@@ -69,15 +70,26 @@ Para ver si está sincronizado (con el JWT de un usuario de turnos):
 curl -s -H "Authorization: Bearer $TOKEN" http://localhost:8081/api/catalog/sync-status
 ```
 
-## Levantar el sistema completo con Docker
+## Levantar con Docker
 
-El Docker Compose de los dos servicios está en el repo de turnos
-([docs/docker.md](https://github.com/Final-Programacion-II/turnos-appointments-service/blob/main/docs/docker.md)).
-La imagen de este servicio se construye acá:
+Primero se construye la imagen:
 
 ```bash
 ./mvnw -ntp -Pprod verify jib:dockerBuild -DskipTests
 ```
+
+Para levantar **solo el catálogo** con su base (sirve para probarlo sin turnos):
+
+```bash
+cp docker/.env.example docker/.env
+chmod 600 docker/.env        # y completar los valores
+docker compose -f docker/compose.yml up -d
+```
+
+Para levantar **el sistema completo**, el Docker Compose de los dos servicios está en el repo
+de turnos
+([docs/docker.md](https://github.com/Final-Programacion-II/turnos-appointments-service/blob/main/docs/docker.md)).
+Los dos usan el puerto 8081, así que se levanta uno o el otro.
 
 ## Tests
 
