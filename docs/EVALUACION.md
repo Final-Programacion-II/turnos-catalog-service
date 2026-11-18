@@ -3,7 +3,7 @@
 
 > Documento **generado automáticamente** por la cátedra de Programación II (UM): RepoSense + análisis de calidad de **7 dimensiones**. **No editar a mano**: se regenera en cada evaluación.
 > Rama evaluada: `main`. Análisis **heurístico** (regex + métricas) + build: es una criba para orientar la revisión, **no una nota**. La **documentación** del repositorio no se evalúa.
-> Generado: 2026-11-17.
+> Generado: 2026-11-18.
 
 ## 1. Veredicto
 
@@ -42,7 +42,7 @@ Criterios de la cátedra (`CRITERIOS-CALIDAD.md`): **Aprobar** se juega con el p
 
 | Autor | Commits | Código (LOC) | Tests (LOC) | Docs (LOC) | Días activos | % del código |
 |---|---:|---:|---:|---:|---:|---:|
-| Facundo Mangione | 33 | 4,041 | 3,996 | 2,128 | 24 | 100% |
+| Facundo Mangione | 33 | 4,041 | 3,996 | 2,127 | 24 | 100% |
 
 > _El LOC de autoría lo calcula RepoSense sobre el historial y puede diferir del LOC de código del análisis (que mira el estado de `main`)._
 
@@ -106,120 +106,153 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 ## 5. Señales detectadas
 
-El análisis encontró las siguientes señales (archivo, sin número de línea a propósito):
+El análisis encontró las siguientes señales, con el archivo y la línea donde se originan cuando están disponibles:
 
-**SRP/responsabilidad** (36)
-- clase 'CatalogApp' grande (LOC=80, métodos=10, campos=2) — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java`
-- método 'CatalogApp.logApplicationStartup' de 35 líneas — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java`
-- clase 'RedisCatalogChangeSource' con baja cohesión (40%) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java`
-- método 'CatalogSnapshotResponse.CategoryItem' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java`
-- método 'CategoryItem.CategoryItem' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java`
-- método 'CatalogSnapshot.CatalogSnapshot' de 46 líneas — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java`
-- método 'CatalogSnapshot.CatalogSnapshot' con complejidad 7 — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java`
-- método 'CatalogSnapshot.validateReferences' con complejidad 6 — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java`
-- método 'CatalogSnapshot.Category' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java`
-- método 'Category.Category' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java`
-- clase 'SecurityUtils' grande (LOC=122, métodos=13, campos=2) — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java`
-- método 'SecurityUtils.extractDetailsFromTokenAttributes' de 39 líneas — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java`
-- método 'SecurityUtils.extractDetailsFromTokenAttributes' con complejidad 7 — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java`
-- clase 'LoggingAspect' grande (LOC=89, métodos=11, campos=1) — `src/main/java/ar/edu/um/turnos/catalog/aop/logging/LoggingAspect.java`
-- método 'ProfessionalAgendaService.toAgenda' de 32 líneas — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalAgendaService.java`
-- método 'ProfessionalService.search' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalService.java`
-- método 'CatalogSyncStatusDTO.CatalogSyncStatusDTO' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/CatalogSyncStatusDTO.java`
-- método 'ProfessionalAgendaDTO.Schedule' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalAgendaDTO.java`
-- método 'Schedule.Schedule' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalAgendaDTO.java`
-- clase 'SecurityMetersService' grande (LOC=35, métodos=7, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java`
-- clase 'SecurityMetersService' con baja cohesión (33%) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java`
-- clase 'WeeklySchedule' grande (LOC=173, métodos=33, campos=11) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- clase 'WeeklySchedule' con baja cohesión (11%) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- clase 'AbstractAuditingEntity' con baja cohesión (14%) — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- clase 'ProfessionalCategory' grande (LOC=125, métodos=24, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java`
-- clase 'ProfessionalCategory' con baja cohesión (15%) — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java`
-- clase 'Professional' grande (LOC=138, métodos=27, campos=9) — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java`
-- clase 'Professional' con baja cohesión (13%) — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java`
-- clase 'CatalogSyncState' grande (LOC=71, métodos=11, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java`
-- clase 'CatalogSyncState' con baja cohesión (24%) — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java`
-- clase 'AccountResource' con baja cohesión (11%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java`
-- clase 'UserVM' con baja cohesión (30%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java`
-- clase 'ExceptionTranslator' grande (LOC=183, métodos=23, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java`
-- clase 'ExceptionTranslator' con baja cohesión (0%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java`
-- método 'ExceptionTranslator.customizeProblem' con complejidad 9 — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java`
-- método 'ExceptionTranslator.getCustomizedErrorDetails' con complejidad 6 — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java`
+**Archivos con más señales**
+
+| Archivo | Señales |
+|---|---:|
+| `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java` | 14 |
+| `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java` | 10 |
+| `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java` | 9 |
+| `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java` | 7 |
+| `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java` | 7 |
+| `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java` | 5 |
+| `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java` | 5 |
+| `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java` | 5 |
+| `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java` | 5 |
+| `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java` | 4 |
 
 **DIP/concretos** (31)
-- clase 'CatalogApp' muy acoplada (CBO=24) — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java`
-- clase 'RedisCatalogChangeSource' muy acoplada (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java`
-- clase 'RedisCatalogChangeSource' instancia 5 concretos (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java`
-- clase 'CatedraRestAdapter' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatedraRestAdapter.java`
-- clase 'CatedraRestAdapter' instancia 3 concretos (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatedraRestAdapter.java`
-- clase 'CatalogUpdatedListener' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/kafka/CatalogUpdatedListener.java`
-- clase 'JpaCatalogReplica' muy acoplada (CBO=25) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java`
-- clase 'JpaCatalogReplica' instancia 6 concretos (CBO=25) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java`
-- clase 'CatalogSyncService' muy acoplada (CBO=11) — `src/main/java/ar/edu/um/turnos/catalog/sync/application/CatalogSyncService.java`
-- clase 'SecurityUtils' muy acoplada (CBO=28) — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java`
-- clase 'LoggingAspect' muy acoplada (CBO=24) — `src/main/java/ar/edu/um/turnos/catalog/aop/logging/LoggingAspect.java`
-- clase 'ProfessionalAgendaService' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalAgendaService.java`
-- clase 'ProfessionalService' muy acoplada (CBO=22) — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalService.java`
-- clase 'WebConfigurer' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/config/WebConfigurer.java`
-- clase 'LiquibaseConfiguration' muy acoplada (CBO=18) — `src/main/java/ar/edu/um/turnos/catalog/config/LiquibaseConfiguration.java`
-- clase 'CRLFLogConverter' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/config/CRLFLogConverter.java`
-- clase 'SecurityJwtConfiguration' muy acoplada (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/config/SecurityJwtConfiguration.java`
-- clase 'SecurityConfiguration' muy acoplada (CBO=11) — `src/main/java/ar/edu/um/turnos/catalog/config/SecurityConfiguration.java`
-- clase 'AsyncConfiguration' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/config/AsyncConfiguration.java`
-- clase 'AsyncConfiguration' instancia 3 concretos (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/config/AsyncConfiguration.java`
-- clase 'WeeklySchedule' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- clase 'WeeklyScheduleResource' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResource.java`
-- clase 'CatalogSyncStatusResource' muy acoplada (CBO=8) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/CatalogSyncStatusResource.java`
-- clase 'AuthenticateController' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AuthenticateController.java`
-- clase 'ProfessionalAgendaResource' muy acoplada (CBO=9) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalAgendaResource.java`
-- clase 'AccountResource' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java`
-- clase 'AccountResource' instancia 3 concretos (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java`
-- clase 'ProfessionalCategoryResource' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalCategoryResource.java`
-- clase 'ProfessionalResource' muy acoplada (CBO=18) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalResource.java`
-- clase 'BadRequestAlertException' muy acoplada (CBO=8) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/BadRequestAlertException.java`
-- clase 'ExceptionTranslator' muy acoplada (CBO=60) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java`
+- clase 'CatalogApp' muy acoplada (CBO=24) — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java:24`
+- clase 'LoggingAspect' muy acoplada (CBO=24) — `src/main/java/ar/edu/um/turnos/catalog/aop/logging/LoggingAspect.java:22`
+- clase 'AsyncConfiguration' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/config/AsyncConfiguration.java:22`
+- clase 'AsyncConfiguration' instancia 3 concretos (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/config/AsyncConfiguration.java:22`
+- clase 'CRLFLogConverter' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/config/CRLFLogConverter.java:23`
+- clase 'LiquibaseConfiguration' muy acoplada (CBO=18) — `src/main/java/ar/edu/um/turnos/catalog/config/LiquibaseConfiguration.java:22`
+- clase 'SecurityConfiguration' muy acoplada (CBO=11) — `src/main/java/ar/edu/um/turnos/catalog/config/SecurityConfiguration.java:19`
+- clase 'SecurityJwtConfiguration' muy acoplada (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/config/SecurityJwtConfiguration.java:21`
+- clase 'WebConfigurer' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/config/WebConfigurer.java:21`
+- clase 'WeeklySchedule' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
+- clase 'SecurityUtils' muy acoplada (CBO=28) — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:21`
+- clase 'ProfessionalAgendaService' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalAgendaService.java:21`
+- clase 'ProfessionalService' muy acoplada (CBO=22) — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalService.java:25`
+- clase 'CatalogSyncService' muy acoplada (CBO=11) — `src/main/java/ar/edu/um/turnos/catalog/sync/application/CatalogSyncService.java:12`
+- clase 'CatedraRestAdapter' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatedraRestAdapter.java:14`
+- clase 'CatedraRestAdapter' instancia 3 concretos (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatedraRestAdapter.java:14`
+- clase 'CatalogUpdatedListener' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/kafka/CatalogUpdatedListener.java:12`
+- clase 'JpaCatalogReplica' muy acoplada (CBO=25) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:29`
+- clase 'JpaCatalogReplica' instancia 6 concretos (CBO=25) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:29`
+- clase 'RedisCatalogChangeSource' muy acoplada (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
+- clase 'RedisCatalogChangeSource' instancia 5 concretos (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
+- clase 'AccountResource' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
+- clase 'AccountResource' instancia 3 concretos (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
+- clase 'AuthenticateController' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AuthenticateController.java:19`
+- clase 'CatalogSyncStatusResource' muy acoplada (CBO=8) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/CatalogSyncStatusResource.java:16`
+- clase 'ProfessionalAgendaResource' muy acoplada (CBO=9) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalAgendaResource.java:19`
+- clase 'ProfessionalCategoryResource' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalCategoryResource.java:18`
+- clase 'ProfessionalResource' muy acoplada (CBO=18) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/ProfessionalResource.java:21`
+- clase 'WeeklyScheduleResource' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/WeeklyScheduleResource.java:18`
+- clase 'BadRequestAlertException' muy acoplada (CBO=8) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/BadRequestAlertException.java:11`
+- clase 'ExceptionTranslator' muy acoplada (CBO=60) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:47`
+
+**SRP/responsabilidad** (54)
+- método 'CatalogApp.logApplicationStartup' de 35 líneas — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java:74`
+- clase 'LoggingAspect' grande (LOC=89, métodos=12, campos=1) — `src/main/java/ar/edu/um/turnos/catalog/aop/logging/LoggingAspect.java:22`
+- método 'LiquibaseConfiguration.liquibase' de 50 líneas — `src/main/java/ar/edu/um/turnos/catalog/config/LiquibaseConfiguration.java:33`
+- clase 'AbstractAuditingEntity' con baja cohesión (14%) — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:23`
+- clase 'CatalogSyncState' grande (LOC=71, métodos=11, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:16`
+- clase 'CatalogSyncState' con baja cohesión (24%) — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:16`
+- clase 'Professional' grande (LOC=138, métodos=27, campos=9) — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:15`
+- clase 'Professional' con baja cohesión (13%) — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:15`
+- clase 'ProfessionalCategory' grande (LOC=125, métodos=24, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:15`
+- clase 'ProfessionalCategory' con baja cohesión (15%) — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:15`
+- clase 'WeeklySchedule' grande (LOC=173, métodos=33, campos=11) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
+- clase 'WeeklySchedule' con baja cohesión (11%) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
+- clase 'SecurityMetersService' grande (LOC=35, métodos=6, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java:8`
+- clase 'SecurityMetersService' con baja cohesión (27%) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java:8`
+- clase 'SecurityUtils' grande (LOC=122, métodos=11, campos=2) — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:21`
+- método 'SecurityUtils.extractDetailsFromTokenAttributes' de 39 líneas — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:116`
+- método 'SecurityUtils.extractDetailsFromTokenAttributes' con complejidad 7 — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:116`
+- método 'ProfessionalAgendaService.toAgenda' de 32 líneas — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalAgendaService.java:43`
+- método 'ProfessionalService.search' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalService.java:50`
+- método 'CatalogSyncStatusDTO.CatalogSyncStatusDTO' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/CatalogSyncStatusDTO.java:9`
+- método 'ProfessionalAgendaDTO.ProfessionalAgendaDTO' con 8 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalAgendaDTO.java:12`
+- método 'ProfessionalAgendaDTO.Schedule' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalAgendaDTO.java:22`
+- método 'Schedule.Schedule' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalAgendaDTO.java:22`
+- método 'ProfessionalCategoryDTO.ProfessionalCategoryDTO' con 7 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalCategoryDTO.java:9`
+- método 'ProfessionalDTO.ProfessionalDTO' de 32 líneas — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalDTO.java:10`
+- método 'ProfessionalDTO.ProfessionalDTO' con 8 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalDTO.java:10`
+- método 'WeeklyScheduleDTO.WeeklyScheduleDTO' de 31 líneas — `src/main/java/ar/edu/um/turnos/catalog/service/dto/WeeklyScheduleDTO.java:11`
+- método 'WeeklyScheduleDTO.WeeklyScheduleDTO' con 10 parámetros — `src/main/java/ar/edu/um/turnos/catalog/service/dto/WeeklyScheduleDTO.java:11`
+- método 'CatalogSnapshot.CatalogSnapshot' de 46 líneas — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:10`
+- método 'CatalogSnapshot.CatalogSnapshot' con complejidad 7 — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:10`
+- método 'CatalogSnapshot.validateReferences' con complejidad 6 — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:17`
+- método 'CatalogSnapshot.Category' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:38`
+- método 'Category.Category' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:38`
+- método 'CatalogSnapshot.Professional' con 7 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:40`
+- método 'Professional.Professional' con 7 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:40`
+- método 'CatalogSnapshot.Schedule' con 9 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:50`
+- método 'Schedule.Schedule' con 9 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:50`
+- método 'CatalogSnapshotResponse.CatalogSnapshotResponse' de 65 líneas — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:11`
+- método 'CatalogSnapshotResponse.CategoryItem' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:36`
+- método 'CategoryItem.CategoryItem' con 6 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:36`
+- método 'CatalogSnapshotResponse.ProfessionalItem' con 7 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:42`
+- método 'ProfessionalItem.ProfessionalItem' con 7 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:42`
+- método 'CatalogSnapshotResponse.ScheduleItem' con 9 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:56`
+- método 'ScheduleItem.ScheduleItem' con 9 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:56`
+- método 'JpaCatalogReplica.save' de 96 líneas — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:88`
+- método 'JpaCatalogReplica.save' con complejidad 19 — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:88`
+- clase 'RedisCatalogChangeSource' con baja cohesión (40%) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
+- clase 'AccountResource' con baja cohesión (11%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
+- clase 'UserVM' con baja cohesión (30%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:51`
+- clase 'ExceptionTranslator' grande (LOC=183, métodos=23, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:47`
+- clase 'ExceptionTranslator' con baja cohesión (0%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:47`
+- método 'ExceptionTranslator.handleExceptionInternal' con 5 parámetros — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:75`
+- método 'ExceptionTranslator.customizeProblem' con complejidad 9 — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:97`
+- método 'ExceptionTranslator.getCustomizedErrorDetails' con complejidad 6 — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:202`
 
 **OCP/type-switch** (6)
-- clase 'SecurityUtils' con 5 type-checks — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java`
-- clase 'WeeklySchedule' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- clase 'ProfessionalCategory' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java`
-- clase 'Professional' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java`
-- clase 'AccountResource' con 2 type-checks — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java`
-- clase 'ExceptionTranslator' con 19 type-checks — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java`
+- clase 'Professional' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:15`
+- clase 'ProfessionalCategory' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:15`
+- clase 'WeeklySchedule' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
+- clase 'SecurityUtils' con 5 type-checks — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:21`
+- clase 'AccountResource' con 2 type-checks — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
+- clase 'ExceptionTranslator' con 19 type-checks — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:47`
 
 **POO** (2)
-- clase 'SecurityMetersService' con 4 campos públicos (encapsulación) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java`
-- clase 'ErrorConstants' con 5 campos públicos (encapsulación) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ErrorConstants.java`
+- clase 'SecurityMetersService' con 4 campos públicos (encapsulación) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java:8`
+- clase 'ErrorConstants' con 5 campos públicos (encapsulación) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ErrorConstants.java:5`
 
 **duplicación** (6)
 - duplicación lógica: 4.3% · boilerplate: 11.2%
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:80, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:56, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:60 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:158, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:108, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:112 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:171, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:121, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:125 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:170, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:120, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:124 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:157, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:107, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:111 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:80, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:56, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:60 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:80`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:157, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:107, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:111 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:157`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:158, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:108, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:112 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:158`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:170, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:120, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:124 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:170`
+- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:171, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:121, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:125 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:171`
 
 **hexagonal** (20)
-- domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- domain importa framework/infra: import org.hibernate.annotations.JdbcTypeCode; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- domain importa framework/infra: import org.hibernate.type.SqlTypes; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java`
-- domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import jakarta.persistence.Column; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import jakarta.persistence.EntityListeners; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import jakarta.persistence.MappedSuperclass; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import org.springframework.data.annotation.CreatedBy; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import org.springframework.data.annotation.CreatedDate; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import org.springframework.data.annotation.LastModifiedBy; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import org.springframework.data.annotation.LastModifiedDate; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import org.springframework.data.jpa.domain.support.AuditingEntityListener; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java`
-- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java`
-- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java`
-- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java`
-- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java`
-- domain importa framework/infra: import jakarta.persistence.Column; — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java`
-- domain importa framework/infra: import jakarta.persistence.Entity; — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java`
+- domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:3`
+- domain importa framework/infra: import jakarta.persistence.Column; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:4`
+- domain importa framework/infra: import jakarta.persistence.EntityListeners; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:5`
+- domain importa framework/infra: import jakarta.persistence.MappedSuperclass; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:6`
+- domain importa framework/infra: import org.springframework.data.annotation.CreatedBy; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:10`
+- domain importa framework/infra: import org.springframework.data.annotation.CreatedDate; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:11`
+- domain importa framework/infra: import org.springframework.data.annotation.LastModifiedBy; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:12`
+- domain importa framework/infra: import org.springframework.data.annotation.LastModifiedDate; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:13`
+- domain importa framework/infra: import org.springframework.data.jpa.domain.support.AuditingEntityListener; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:14`
+- domain importa framework/infra: import jakarta.persistence.Column; — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:3`
+- domain importa framework/infra: import jakarta.persistence.Entity; — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:4`
+- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:3`
+- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:4`
+- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:3`
+- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:4`
+- domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:4`
+- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:5`
+- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:6`
+- domain importa framework/infra: import org.hibernate.annotations.JdbcTypeCode; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:11`
+- domain importa framework/infra: import org.hibernate.type.SqlTypes; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:12`
 
 ## 6. Evolución por commit
 
