@@ -1,0 +1,92 @@
+# El servicio de catálogo solo, con su base de datos.
+#
+# Sirve para probar el catálogo sin levantar turnos. El sistema completo (los dos servicios)
+# está en el repositorio de turnos: turnos-appointments-service/docker/compose.yml. Los dos
+# usan el puerto 8081, así que se levanta uno o el otro.
+#
+# La cátedra (API REST, Redis y Kafka) es externa: el contenedor llega a ella por la red de
+# ZeroTier de la máquina.
+#
+# Antes hay que construir la imagen y completar docker/.env:
+#
+#   ./mvnw -ntp -Pprod verify jib:dockerBuild -DskipTests
+#   cp docker/.env.example docker/.env && chmod 600 docker/.env
+#   docker compose -f docker/compose.yml up -d
+
+name: turnos-catalogo
+
+services:
+  catalog-postgresql:
+    image: postgres:18.4
+    environment:
+      POSTGRES_DB: catalog
+      POSTGRES_USER: catalog
+      POSTGRES_PASSWORD: ${CATALOG_DB_PASSWORD:?Falta CATALOG_DB_PASSWORD en docker/.env}
+    volumes:
+      - catalog-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U catalog -d catalog']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    # Sin puertos hacia afuera y en una red propia: solo el catálogo llega a esta base
+    networks:
+      - catalog-db
+
+  catalog:
+    image: catalog:latest
+    environment:
+      _JAVA_OPTIONS: -Xmx512m -Xms256m
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://catalog-postgresql:5432/catalog
+      SPRING_DATASOURCE_USERNAME: catalog
+      SPRING_DATASOURCE_PASSWORD: ${CATALOG_DB_PASSWORD}
+      SPRING_LIQUIBASE_URL: jdbc:postgresql://catalog-postgresql:5432/catalog
+      JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64SECRET: ${JWT_BASE64_SECRET:?Falta JWT_BASE64_SECRET en docker/.env}
+      CATEDRA_BASE_URL: ${CATEDRA_BASE_URL:?Falta CATEDRA_BASE_URL en docker/.env}
+      CATEDRA_TOKEN: ${CATEDRA_TOKEN:?Falta CATEDRA_TOKEN en docker/.env}
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST:?Falta REDIS_HOST en docker/.env}
+      SPRING_DATA_REDIS_PORT: ${REDIS_PORT:-6379}
+      SPRING_DATA_REDIS_USERNAME: ${REDIS_USERNAME}
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:?Falta KAFKA_BOOTSTRAP_SERVERS en docker/.env}
+      CATEDRA_KAFKA_CATALOG_TOPIC: ${KAFKA_CATALOG_TOPIC:?Falta KAFKA_CATALOG_TOPIC en docker/.env}
+      CATEDRA_KAFKA_GROUP_ID: ${CATALOG_KAFKA_GROUP_ID:?Falta CATALOG_KAFKA_GROUP_ID en docker/.env}
+    ports:
+      - 127.0.0.1:8081:8081
+    # readiness mira que la app arrancó y tiene su base. No incluye a la cátedra: si Redis o
+    # Kafka no responden, el servicio igual se considera levantado y lo informa en
+    # /api/catalog/sync-status.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \"GET /management/health/readiness HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n\" >&3; grep -q \"\\\"status\\\":\\\"UP\\\"\" <&3'"
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      catalog-postgresql:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - backend
+      - catalog-db
+
+# Subredes fijas en 10.42.x: la cátedra está en 172.17.201.1, dentro del rango que Docker usa
+# por defecto (172.17.0.0/16). Son distintas a las del compose del sistema completo
+# (10.42.0 a 10.42.2) para que las dos definiciones puedan existir en la misma máquina.
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 10.42.10.0/24
+  catalog-db:
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.42.11.0/24
+
+# Los datos sobreviven a docker compose down; se borran solo con down -v
+volumes:
+  catalog-data:

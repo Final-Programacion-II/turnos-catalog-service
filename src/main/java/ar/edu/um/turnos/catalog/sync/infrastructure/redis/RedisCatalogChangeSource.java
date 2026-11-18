@@ -17,7 +17,13 @@ import tools.jackson.databind.json.JsonMapper;
 @Component
 public class RedisCatalogChangeSource implements CatalogChangeSource {
 
-    private static final String PREFIX = "catedra:sync:";
+    // Claves que publica la cátedra (sección 14 de la referencia de integración)
+    private static final String CURRENT_VERSION_KEY = "catedra:sync:current-version";
+    private static final String OLDEST_VERSION_KEY = "catedra:sync:oldest-available-version";
+    private static final String CHANGES_KEY = "catedra:sync:changes:%d";
+    private static final String CATEGORIES_HASH = "catedra:sync:professional-categories";
+    private static final String PROFESSIONALS_HASH = "catedra:sync:professionals";
+    private static final String SCHEDULES_HASH = "catedra:sync:weekly-schedules";
 
     private final StringRedisTemplate redis;
     private final JsonMapper json = JsonMapper.builder().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
@@ -28,8 +34,8 @@ public class RedisCatalogChangeSource implements CatalogChangeSource {
 
     @Override
     public CatalogVersions versions() {
-        String current = redis.opsForValue().get(PREFIX + "current-version");
-        String oldest = redis.opsForValue().get(PREFIX + "oldest-available-version");
+        String current = redis.opsForValue().get(CURRENT_VERSION_KEY);
+        String oldest = redis.opsForValue().get(OLDEST_VERSION_KEY);
         if (current == null || oldest == null) {
             throw new IllegalStateException("Redis no tiene las versiones del catálogo");
         }
@@ -38,24 +44,24 @@ public class RedisCatalogChangeSource implements CatalogChangeSource {
 
     @Override
     public CatalogChange fetchChange(long version) {
-        String raw = redis.opsForValue().get(PREFIX + "changes:" + version);
+        String raw = redis.opsForValue().get(CHANGES_KEY.formatted(version));
         if (raw == null) {
-            throw new IllegalStateException("No está disponible el cambio de la versión " + version);
+            throw new IllegalStateException("No está disponible el cambio de la versión %d".formatted(version));
         }
         ChangeJson change = json.readValue(raw, ChangeJson.class);
 
         List<CatalogSnapshot.Category> categories = new ArrayList<>();
-        for (String item : readHash("professional-categories", change.changes().professionalCategories())) {
+        for (String item : readHash(CATEGORIES_HASH, change.changes().professionalCategories())) {
             categories.add(json.readValue(item, CategoryItem.class).toDomain());
         }
 
         List<CatalogSnapshot.Professional> professionals = new ArrayList<>();
-        for (String item : readHash("professionals", change.changes().professionals())) {
+        for (String item : readHash(PROFESSIONALS_HASH, change.changes().professionals())) {
             professionals.add(json.readValue(item, ProfessionalItem.class).toDomain());
         }
 
         List<CatalogSnapshot.Schedule> schedules = new ArrayList<>();
-        for (String item : readHash("weekly-schedules", change.changes().weeklySchedules())) {
+        for (String item : readHash(SCHEDULES_HASH, change.changes().weeklySchedules())) {
             schedules.add(json.readValue(item, ScheduleItem.class).toDomain());
         }
 
@@ -66,9 +72,9 @@ public class RedisCatalogChangeSource implements CatalogChangeSource {
     private List<String> readHash(String hash, List<Long> ids) {
         List<String> values = new ArrayList<>();
         for (Long id : ids) {
-            Object value = redis.opsForHash().get(PREFIX + hash, id.toString());
+            Object value = redis.opsForHash().get(hash, id.toString());
             if (value == null) {
-                throw new IllegalStateException("Falta el id " + id + " en " + hash);
+                throw new IllegalStateException("Falta el id %d en %s".formatted(id, hash));
             }
             values.add(value.toString());
         }

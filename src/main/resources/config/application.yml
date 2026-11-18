@@ -62,6 +62,10 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
+    # El chequeo de Redis de Spring usa un comando que el usuario de Redis de la cátedra no
+    # tiene permitido, así que siempre daba DOWN. El estado real se ve en /api/catalog/sync-status
+    redis:
+      enabled: false
   prometheus:
     metrics:
       export:
