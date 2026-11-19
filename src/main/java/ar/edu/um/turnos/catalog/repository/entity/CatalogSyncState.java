@@ -1,4 +1,4 @@
-package ar.edu.um.turnos.catalog.domain;
+package ar.edu.um.turnos.catalog.repository.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

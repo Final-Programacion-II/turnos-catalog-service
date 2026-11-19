@@ -1,7 +1,7 @@
 package ar.edu.um.turnos.catalog.web.rest;
 
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
 import ar.edu.um.turnos.catalog.service.dto.CatalogSyncStatusDTO;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;

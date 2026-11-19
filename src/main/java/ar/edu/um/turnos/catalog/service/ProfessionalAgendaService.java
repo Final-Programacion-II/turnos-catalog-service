@@ -1,11 +1,11 @@
 package ar.edu.um.turnos.catalog.service;
 
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalRepository;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.WeeklySchedule;
 import ar.edu.um.turnos.catalog.service.dto.ProfessionalAgendaDTO;
 import java.util.Comparator;
 import java.util.List;

@@ -5,10 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.WeeklySchedule;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -34,28 +34,20 @@ class WeeklyScheduleResourceIT {
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     private static final Long DEFAULT_EXTERNAL_ID = 1L;
-    private static final Long UPDATED_EXTERNAL_ID = 2L;
 
     private static final Weekday DEFAULT_DAY_OF_WEEK = Weekday.MONDAY;
-    private static final Weekday UPDATED_DAY_OF_WEEK = Weekday.TUESDAY;
 
     private static final LocalTime DEFAULT_START_TIME = LocalTime.NOON;
-    private static final LocalTime UPDATED_START_TIME = LocalTime.MAX.withNano(0);
 
     private static final LocalTime DEFAULT_END_TIME = LocalTime.NOON;
-    private static final LocalTime UPDATED_END_TIME = LocalTime.MAX.withNano(0);
 
     private static final Integer DEFAULT_SLOT_DURATION_MINUTES = 1;
-    private static final Integer UPDATED_SLOT_DURATION_MINUTES = 2;
 
     private static final Boolean DEFAULT_ENABLED = false;
-    private static final Boolean UPDATED_ENABLED = true;
 
     private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_CREATED_AT = Instant.ofEpochMilli(1704076426520L);
 
     private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_UPDATED_AT = Instant.ofEpochMilli(1704076426520L);
 
     private static final String ENTITY_API_URL = "/api/weekly-schedules";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -80,15 +72,15 @@ class WeeklyScheduleResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static WeeklySchedule createEntity(EntityManager em) {
-        WeeklySchedule weeklySchedule = new WeeklySchedule()
-            .externalId(DEFAULT_EXTERNAL_ID)
-            .dayOfWeek(DEFAULT_DAY_OF_WEEK)
-            .startTime(DEFAULT_START_TIME)
-            .endTime(DEFAULT_END_TIME)
-            .slotDurationMinutes(DEFAULT_SLOT_DURATION_MINUTES)
-            .enabled(DEFAULT_ENABLED)
-            .createdAt(DEFAULT_CREATED_AT)
-            .updatedAt(DEFAULT_UPDATED_AT);
+        WeeklySchedule weeklySchedule = new WeeklySchedule();
+        weeklySchedule.setExternalId(DEFAULT_EXTERNAL_ID);
+        weeklySchedule.setDayOfWeek(DEFAULT_DAY_OF_WEEK);
+        weeklySchedule.setStartTime(DEFAULT_START_TIME);
+        weeklySchedule.setEndTime(DEFAULT_END_TIME);
+        weeklySchedule.setSlotDurationMinutes(DEFAULT_SLOT_DURATION_MINUTES);
+        weeklySchedule.setEnabled(DEFAULT_ENABLED);
+        weeklySchedule.setCreatedAt(DEFAULT_CREATED_AT);
+        weeklySchedule.setUpdatedAt(DEFAULT_UPDATED_AT);
         // Add required entity
         Professional professional;
         if (TestUtil.findAll(em, Professional.class).isEmpty()) {
@@ -100,35 +92,6 @@ class WeeklyScheduleResourceIT {
         }
         weeklySchedule.setProfessional(professional);
         return weeklySchedule;
-    }
-
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static WeeklySchedule createUpdatedEntity(EntityManager em) {
-        WeeklySchedule updatedWeeklySchedule = new WeeklySchedule()
-            .externalId(UPDATED_EXTERNAL_ID)
-            .dayOfWeek(UPDATED_DAY_OF_WEEK)
-            .startTime(UPDATED_START_TIME)
-            .endTime(UPDATED_END_TIME)
-            .slotDurationMinutes(UPDATED_SLOT_DURATION_MINUTES)
-            .enabled(UPDATED_ENABLED)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
-        // Add required entity
-        Professional professional;
-        if (TestUtil.findAll(em, Professional.class).isEmpty()) {
-            professional = ProfessionalResourceIT.createUpdatedEntity(em);
-            em.persist(professional);
-            em.flush();
-        } else {
-            professional = TestUtil.findAll(em, Professional.class).get(0);
-        }
-        updatedWeeklySchedule.setProfessional(professional);
-        return updatedWeeklySchedule;
     }
 
     @BeforeEach

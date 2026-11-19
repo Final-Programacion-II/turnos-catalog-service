@@ -1,7 +1,7 @@
 package ar.edu.um.turnos.catalog.sync.infrastructure.status;
 
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
 import java.time.Instant;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

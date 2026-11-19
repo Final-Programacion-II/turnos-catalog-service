@@ -1,6 +1,6 @@
 package ar.edu.um.turnos.catalog.repository;
 
-import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
+import ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

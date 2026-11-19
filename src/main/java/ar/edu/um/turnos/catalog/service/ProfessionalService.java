@@ -1,9 +1,9 @@
 package ar.edu.um.turnos.catalog.service;
 
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.repository.ProfessionalRepository;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.service.dto.ProfessionalDTO;
 import java.time.LocalTime;
 import java.util.List;

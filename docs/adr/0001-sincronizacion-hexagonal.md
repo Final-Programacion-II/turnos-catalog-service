@@ -25,6 +25,9 @@ La sincronización vive en el paquete `sync` con arquitectura hexagonal:
 
 El código generado por JHipster queda en capas, como lo genera.
 
+> Actualización (noviembre): las entidades JPA pasaron de `domain` a `repository.entity`
+> ([decisiones.md](../decisiones.md), punto 11). El único `domain` del servicio es `sync.domain`.
+
 Las reglas se verifican en cada build con ArchUnit (`SyncArchitectureTest`), y
 `TechnicalStructureTest` de JHipster excluye el paquete `sync`.
 

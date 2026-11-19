@@ -1,14 +1,14 @@
 package ar.edu.um.turnos.catalog.sync.infrastructure.persistence;
 
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
-import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalCategoryRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalRepository;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory;
+import ar.edu.um.turnos.catalog.repository.entity.WeeklySchedule;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.sync.domain.CatalogChange;
 import ar.edu.um.turnos.catalog.sync.domain.CatalogSnapshot;
 import ar.edu.um.turnos.catalog.sync.ports.out.CatalogReplica;

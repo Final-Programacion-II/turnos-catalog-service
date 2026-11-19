@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
 import ar.edu.um.turnos.catalog.repository.ProfessionalCategoryRepository;
+import ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import org.junit.jupiter.api.AfterEach;
@@ -28,22 +28,16 @@ import org.springframework.transaction.annotation.Transactional;
 class ProfessionalCategoryResourceIT {
 
     private static final Long DEFAULT_EXTERNAL_ID = 1L;
-    private static final Long UPDATED_EXTERNAL_ID = 2L;
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_ENABLED = false;
-    private static final Boolean UPDATED_ENABLED = true;
 
     private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_CREATED_AT = Instant.ofEpochMilli(1704076426520L);
 
     private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_UPDATED_AT = Instant.ofEpochMilli(1704076426520L);
 
     private static final String ENTITY_API_URL = "/api/professional-categories";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -68,29 +62,14 @@ class ProfessionalCategoryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ProfessionalCategory createEntity() {
-        return new ProfessionalCategory()
-            .externalId(DEFAULT_EXTERNAL_ID)
-            .name(DEFAULT_NAME)
-            .description(DEFAULT_DESCRIPTION)
-            .enabled(DEFAULT_ENABLED)
-            .createdAt(DEFAULT_CREATED_AT)
-            .updatedAt(DEFAULT_UPDATED_AT);
-    }
-
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static ProfessionalCategory createUpdatedEntity() {
-        return new ProfessionalCategory()
-            .externalId(UPDATED_EXTERNAL_ID)
-            .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION)
-            .enabled(UPDATED_ENABLED)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+        ProfessionalCategory entity = new ProfessionalCategory();
+        entity.setExternalId(DEFAULT_EXTERNAL_ID);
+        entity.setName(DEFAULT_NAME);
+        entity.setDescription(DEFAULT_DESCRIPTION);
+        entity.setEnabled(DEFAULT_ENABLED);
+        entity.setCreatedAt(DEFAULT_CREATED_AT);
+        entity.setUpdatedAt(DEFAULT_UPDATED_AT);
+        return entity;
     }
 
     @BeforeEach

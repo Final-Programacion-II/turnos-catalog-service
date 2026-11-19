@@ -1,6 +1,6 @@
 package ar.edu.um.turnos.catalog.repository;
 
-import ar.edu.um.turnos.catalog.domain.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
