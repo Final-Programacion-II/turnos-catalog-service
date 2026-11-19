@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
-import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory;
+import ar.edu.um.turnos.catalog.repository.entity.WeeklySchedule;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import jakarta.persistence.EntityManager;
 import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -158,32 +158,34 @@ class ProfessionalSearchIT {
     }
 
     private ProfessionalCategory categoria(Long externalId, String nombre, boolean habilitada) {
-        ProfessionalCategory categoria = new ProfessionalCategory().externalId(externalId).name(nombre).enabled(habilitada);
+        ProfessionalCategory categoria = new ProfessionalCategory();
+        categoria.setExternalId(externalId);
+        categoria.setName(nombre);
+        categoria.setEnabled(habilitada);
         em.persist(categoria);
         return categoria;
     }
 
     private Professional profesional(Long externalId, String nombre, String apellido, boolean habilitado, ProfessionalCategory categoria) {
-        Professional profesional = new Professional()
-            .externalId(externalId)
-            .firstName(nombre)
-            .lastName(apellido)
-            .enabled(habilitado)
-            .category(categoria);
+        Professional profesional = new Professional();
+        profesional.setExternalId(externalId);
+        profesional.setFirstName(nombre);
+        profesional.setLastName(apellido);
+        profesional.setEnabled(habilitado);
+        profesional.setCategory(categoria);
         em.persist(profesional);
         return profesional;
     }
 
     private void horario(Long externalId, Professional profesional, Weekday dia, String desde, String hasta, boolean habilitado) {
-        em.persist(
-            new WeeklySchedule()
-                .externalId(externalId)
-                .professional(profesional)
-                .dayOfWeek(dia)
-                .startTime(LocalTime.parse(desde))
-                .endTime(LocalTime.parse(hasta))
-                .slotDurationMinutes(30)
-                .enabled(habilitado)
-        );
+        WeeklySchedule horario = new WeeklySchedule();
+        horario.setExternalId(externalId);
+        horario.setProfessional(profesional);
+        horario.setDayOfWeek(dia);
+        horario.setStartTime(LocalTime.parse(desde));
+        horario.setEndTime(LocalTime.parse(hasta));
+        horario.setSlotDurationMinutes(30);
+        horario.setEnabled(habilitado);
+        em.persist(horario);
     }
 }

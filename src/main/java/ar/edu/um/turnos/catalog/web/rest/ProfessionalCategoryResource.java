@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ar.edu.um.turnos.catalog.domain.ProfessionalCategory}.
+ * REST controller for managing {@link ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory}.
  */
 @RestController
 @RequestMapping("/api/professional-categories")

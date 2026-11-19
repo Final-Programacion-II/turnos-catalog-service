@@ -3,7 +3,7 @@ package ar.edu.um.turnos.catalog.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

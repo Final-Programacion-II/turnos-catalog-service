@@ -2,9 +2,9 @@ package ar.edu.um.turnos.catalog.service.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.WeeklySchedule;
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.WeeklySchedule;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 

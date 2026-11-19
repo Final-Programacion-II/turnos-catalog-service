@@ -1,4 +1,4 @@
-package ar.edu.um.turnos.catalog.domain.enumeration;
+package ar.edu.um.turnos.catalog.repository.entity.enumeration;
 
 /**
  * The Weekday enumeration.

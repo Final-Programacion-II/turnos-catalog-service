@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalCategoryRepository;
 import ar.edu.um.turnos.catalog.repository.ProfessionalRepository;
 import ar.edu.um.turnos.catalog.repository.WeeklyScheduleRepository;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory;
 import ar.edu.um.turnos.catalog.sync.domain.CatalogChange;
 import ar.edu.um.turnos.catalog.sync.domain.CatalogSnapshot;
 import java.time.DayOfWeek;

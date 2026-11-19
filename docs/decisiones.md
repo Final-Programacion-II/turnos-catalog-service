@@ -139,3 +139,26 @@ Nadie lo llamaba y no tenía tests.
   solo. El del sistema completo sigue en el repo de turnos.
 - Las claves de Redis de la cátedra quedaron como constantes con nombre en
   `RedisCatalogChangeSource`, en lugar de armarse concatenando texto en cada llamada.
+
+## 11. Entidades de la copia: superclase común y fuera de `domain`
+
+Las tres entidades que se copian de la cátedra (`ProfessionalCategory`, `Professional` y
+`WeeklySchedule`) repetían los mismos cuatro campos con sus getters y setters: el id de la
+cátedra, si están habilitadas y las dos fechas. Además JHipster las deja en un paquete
+`domain`, y el nombre confunde: tienen anotaciones de JPA y validación, así que no son un
+dominio independiente del framework.
+
+- Decisión: lo común pasa a `CatalogEntity`, una superclase con `@MappedSuperclass`. Cada
+  entidad queda solo con lo suyo. El id local sigue declarado en cada una, para no cambiar
+  cómo se generan los ids.
+- Decisión: se sacan los setters encadenados (`.firstName(...).lastName(...)`) que genera
+  JHipster. Solo los usaban los tests y duplicaban cada setter.
+- Decisión: las entidades pasan a `repository.entity`, junto a sus repositorios. Son el modelo
+  de persistencia de la copia. El único paquete `domain` que queda es `sync.domain` (el
+  snapshot, los cambios y las versiones), que no depende de Spring, JPA ni Jackson.
+- Las entidades ya no tienen anotaciones de Jackson: la API devuelve los DTO (punto 9), nunca
+  una entidad.
+- Se borró `AbstractAuditingEntity`, que venía con JHipster y ninguna entidad usaba.
+- Descartado: armar un dominio aparte para las búsquedas. Son consultas de solo lectura sobre
+  la copia, sin reglas propias; separar dominio y persistencia ahí sería duplicar clases sin
+  ganar nada.

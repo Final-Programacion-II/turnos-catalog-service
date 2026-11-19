@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ar.edu.um.turnos.catalog.IntegrationTest;
-import ar.edu.um.turnos.catalog.domain.CatalogSyncState;
 import ar.edu.um.turnos.catalog.repository.CatalogSyncStateRepository;
+import ar.edu.um.turnos.catalog.repository.entity.CatalogSyncState;
 import ar.edu.um.turnos.catalog.sync.ports.in.SynchronizeCatalogUseCase;
 import java.time.Instant;
 import org.junit.jupiter.api.AfterEach;

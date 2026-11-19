@@ -1,7 +1,7 @@
 package ar.edu.um.turnos.catalog.service.dto;
 
-import ar.edu.um.turnos.catalog.domain.Professional;
-import ar.edu.um.turnos.catalog.domain.ProfessionalCategory;
+import ar.edu.um.turnos.catalog.repository.entity.Professional;
+import ar.edu.um.turnos.catalog.repository.entity.ProfessionalCategory;
 import java.time.Instant;
 
 /**

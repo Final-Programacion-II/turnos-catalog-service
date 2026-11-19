@@ -1,6 +1,6 @@
 package ar.edu.um.turnos.catalog.web.rest;
 
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import ar.edu.um.turnos.catalog.service.ProfessionalService;
 import ar.edu.um.turnos.catalog.service.dto.ProfessionalDTO;
 import ar.edu.um.turnos.catalog.web.rest.errors.BadRequestAlertException;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ar.edu.um.turnos.catalog.domain.Professional}.
+ * REST controller for managing {@link ar.edu.um.turnos.catalog.repository.entity.Professional}.
  */
 @RestController
 @RequestMapping("/api/professionals")

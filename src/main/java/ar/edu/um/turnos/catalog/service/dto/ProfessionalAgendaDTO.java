@@ -1,6 +1,6 @@
 package ar.edu.um.turnos.catalog.service.dto;
 
-import ar.edu.um.turnos.catalog.domain.enumeration.Weekday;
+import ar.edu.um.turnos.catalog.repository.entity.enumeration.Weekday;
 import java.time.LocalTime;
 import java.util.List;
 
