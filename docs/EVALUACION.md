@@ -3,24 +3,24 @@
 
 > Documento **generado automáticamente** por la cátedra de Programación II (UM): RepoSense + análisis de calidad de **7 dimensiones**. **No editar a mano**: se regenera en cada evaluación.
 > Rama evaluada: `main`. Análisis **heurístico** (regex + métricas) + build: es una criba para orientar la revisión, **no una nota**. La **documentación** del repositorio no se evalúa.
-> Generado: 2026-11-18.
+> Generado: 2026-11-20.
 
 ## 1. Veredicto
 
 | Aspecto | Resultado |
 |---|---|
-| Índice de calidad | **56/100** |
+| Índice de calidad | **76/100** |
 | Tipo de repositorio | `backend` |
 | Build (`mvnw verify` / `gradlew check`) | OK |
-| Código (LOC) | 6,471 |
-| Archivos de código | 135 |
-| Clases | 144 |
-| Código dentro de clases (%POO) | 78% |
+| Código (LOC) | 6,100 |
+| Archivos de código | 132 |
+| Clases | 141 |
+| Código dentro de clases (%POO) | 76% |
 | Funciones fuera de clases | 0 |
-| Duplicación (puerta) | 4.3% |
-| Duplicación lógica | 4.6% |
-| Duplicación de boilerplate | 11.2% |
-| Cobertura | 76% |
+| Duplicación (puerta) | 2.5% |
+| Duplicación lógica | 2.7% |
+| Duplicación de boilerplate | 9.2% |
+| Cobertura | 77% |
 | Tope duro aplicado a D1 | `POO_BAJO` → D1 ≤ 60 |
 
 > Este informe **describe** lo que el análisis midió con los criterios ya establecidos de la materia. No es una nota.
@@ -31,18 +31,18 @@ Criterios de la cátedra (`CRITERIOS-CALIDAD.md`): **Aprobar** se juega con el p
 
 | Semáforo | Resultado |
 |---|---|
-| Aprobar (`estandar`) | **no cumple** — 5/11 |
-| Destacar (`exigente`) | **no cumple** — 4/11 |
+| Aprobar (`estandar`) | **no cumple** — 7/11 |
+| Destacar (`exigente`) | **no cumple** — 5/11 |
 
-**Para aprobar, falta cumplir:** SOLID; Hexagonal; Duplicación
+**Para aprobar, falta cumplir:** SOLID
 
-**Para destacar, falta cumplir:** SOLID; POO; Hexagonal; Duplicación
+**Para destacar, falta cumplir:** SOLID; POO; Duplicación
 
 ## 3. Autoría (RepoSense)
 
 | Autor | Commits | Código (LOC) | Tests (LOC) | Docs (LOC) | Días activos | % del código |
 |---|---:|---:|---:|---:|---:|---:|
-| Facundo Mangione | 33 | 4,041 | 3,996 | 2,127 | 24 | 100% |
+| Facundo Mangione | 35 | 3,754 | 3,827 | 2,181 | 27 | 100% |
 
 > _El LOC de autoría lo calcula RepoSense sobre el historial y puede diferir del LOC de código del análisis (que mira el estado de `main`)._
 
@@ -53,12 +53,12 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 | Dimensión | Peso | Puntaje |
 |:--|--:|--:|
 | **D1** Diseño OO, SOLID y patrones (20%) | 20% | 4 |
-| **D2** Arquitectura hexagonal — backend (15%) | 15% | 0 |
+| **D2** Arquitectura hexagonal — backend (15%) | 15% | 100 |
 | **D3** Frontend KMP: MVVM y buenas prácticas (10%) | 10% | N/A |
 | **D4** Integración y contrato (10%) | 10% | 80 |
 | **D5** Seguridad y robustez (10%) | 10% | 100 |
 | **D6** Pruebas y cobertura (20%) | 20% | 100 |
-| **D7** Proceso y entrega (15%) | 15% | 77 |
+| **D7** Proceso y entrega (15%) | 15% | 100 |
 
 ### D1. Diseño OO, SOLID y patrones (20%)
 
@@ -74,11 +74,7 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 - **Qué mide:** Separación en capas (dominio, puertos de entrada/salida, adaptadores) y dirección de las dependencias del backend.
 - **Por qué importa:** Aislar el dominio de la infraestructura permite cambiar la base de datos, el framework o el transporte sin tocar las reglas de negocio.
-- **Tu resultado:** **0/100**
-- **Para investigar la causa:**
-    - ¿El dominio importa framework o detalles de persistencia?
-    - ¿Dónde vive la lógica de negocio frente a los controladores?
-    - ¿Se definieron puertos para los servicios que se consumen?
+- **Tu resultado:** **100/100**
 
 ### D4. Integración y contrato (10%)
 
@@ -102,7 +98,7 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 - **Qué mide:** Artefactos verificables de proceso/entrega: `compose`, `.env.example`, CI (`.github/workflows/`), `CODEOWNERS` y wrapper de build (`mvnw`/`gradlew`). **No** puntúa documentación.
 - **Por qué importa:** Un proyecto que compila, se levanta y se valida solo es más fácil de revisar y de integrar en equipo.
-- **Tu resultado:** **77/100**
+- **Tu resultado:** **100/100**
 
 ## 5. Señales detectadas
 
@@ -112,16 +108,16 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 
 | Archivo | Señales |
 |---|---:|
-| `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java` | 14 |
-| `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java` | 10 |
+| `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java` | 9 |
 | `src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java` | 9 |
-| `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java` | 7 |
 | `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java` | 7 |
 | `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java` | 5 |
-| `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java` | 5 |
-| `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java` | 5 |
 | `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java` | 5 |
+| `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java` | 4 |
 | `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java` | 4 |
+| `src/main/java/ar/edu/um/turnos/catalog/repository/entity/WeeklySchedule.java` | 4 |
+| `src/main/java/ar/edu/um/turnos/catalog/repository/entity/Professional.java` | 3 |
+| `src/main/java/ar/edu/um/turnos/catalog/service/dto/ProfessionalAgendaDTO.java` | 3 |
 
 **DIP/concretos** (31)
 - clase 'CatalogApp' muy acoplada (CBO=24) — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java:24`
@@ -133,7 +129,7 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 - clase 'SecurityConfiguration' muy acoplada (CBO=11) — `src/main/java/ar/edu/um/turnos/catalog/config/SecurityConfiguration.java:19`
 - clase 'SecurityJwtConfiguration' muy acoplada (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/config/SecurityJwtConfiguration.java:21`
 - clase 'WebConfigurer' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/config/WebConfigurer.java:21`
-- clase 'WeeklySchedule' muy acoplada (CBO=15) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
+- clase 'WeeklySchedule' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/WeeklySchedule.java:26`
 - clase 'SecurityUtils' muy acoplada (CBO=28) — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:21`
 - clase 'ProfessionalAgendaService' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalAgendaService.java:21`
 - clase 'ProfessionalService' muy acoplada (CBO=22) — `src/main/java/ar/edu/um/turnos/catalog/service/ProfessionalService.java:25`
@@ -143,8 +139,8 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 - clase 'CatalogUpdatedListener' muy acoplada (CBO=13) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/kafka/CatalogUpdatedListener.java:12`
 - clase 'JpaCatalogReplica' muy acoplada (CBO=25) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:29`
 - clase 'JpaCatalogReplica' instancia 6 concretos (CBO=25) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:29`
-- clase 'RedisCatalogChangeSource' muy acoplada (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
-- clase 'RedisCatalogChangeSource' instancia 5 concretos (CBO=19) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
+- clase 'RedisCatalogChangeSource' muy acoplada (CBO=20) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
+- clase 'RedisCatalogChangeSource' instancia 5 concretos (CBO=20) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
 - clase 'AccountResource' muy acoplada (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
 - clase 'AccountResource' instancia 3 concretos (CBO=16) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
 - clase 'AuthenticateController' muy acoplada (CBO=12) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AuthenticateController.java:19`
@@ -160,17 +156,16 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 - método 'CatalogApp.logApplicationStartup' de 35 líneas — `src/main/java/ar/edu/um/turnos/catalog/CatalogApp.java:74`
 - clase 'LoggingAspect' grande (LOC=89, métodos=12, campos=1) — `src/main/java/ar/edu/um/turnos/catalog/aop/logging/LoggingAspect.java:22`
 - método 'LiquibaseConfiguration.liquibase' de 50 líneas — `src/main/java/ar/edu/um/turnos/catalog/config/LiquibaseConfiguration.java:33`
-- clase 'AbstractAuditingEntity' con baja cohesión (14%) — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:23`
-- clase 'CatalogSyncState' grande (LOC=71, métodos=11, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:16`
-- clase 'CatalogSyncState' con baja cohesión (24%) — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:16`
-- clase 'Professional' grande (LOC=138, métodos=27, campos=9) — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:15`
-- clase 'Professional' con baja cohesión (13%) — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:15`
-- clase 'ProfessionalCategory' grande (LOC=125, métodos=24, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:15`
-- clase 'ProfessionalCategory' con baja cohesión (15%) — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:15`
-- clase 'WeeklySchedule' grande (LOC=173, métodos=33, campos=11) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
-- clase 'WeeklySchedule' con baja cohesión (11%) — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
 - clase 'SecurityMetersService' grande (LOC=35, métodos=6, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java:8`
 - clase 'SecurityMetersService' con baja cohesión (27%) — `src/main/java/ar/edu/um/turnos/catalog/management/SecurityMetersService.java:8`
+- clase 'CatalogEntity' con baja cohesión (14%) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/CatalogEntity.java:16`
+- clase 'CatalogSyncState' grande (LOC=71, métodos=11, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/CatalogSyncState.java:16`
+- clase 'CatalogSyncState' con baja cohesión (24%) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/CatalogSyncState.java:16`
+- clase 'Professional' grande (LOC=62, métodos=11, campos=5) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/Professional.java:19`
+- clase 'Professional' con baja cohesión (18%) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/Professional.java:19`
+- clase 'ProfessionalCategory' con baja cohesión (19%) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/ProfessionalCategory.java:19`
+- clase 'WeeklySchedule' grande (LOC=86, métodos=15, campos=7) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/WeeklySchedule.java:26`
+- clase 'WeeklySchedule' con baja cohesión (13%) — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/WeeklySchedule.java:26`
 - clase 'SecurityUtils' grande (LOC=122, métodos=11, campos=2) — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:21`
 - método 'SecurityUtils.extractDetailsFromTokenAttributes' de 39 líneas — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:116`
 - método 'SecurityUtils.extractDetailsFromTokenAttributes' con complejidad 7 — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:116`
@@ -203,6 +198,7 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 - método 'ScheduleItem.ScheduleItem' con 9 parámetros — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:56`
 - método 'JpaCatalogReplica.save' de 96 líneas — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:88`
 - método 'JpaCatalogReplica.save' con complejidad 19 — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplica.java:88`
+- clase 'RedisCatalogChangeSource' grande (LOC=58, métodos=6, campos=8) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
 - clase 'RedisCatalogChangeSource' con baja cohesión (40%) — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/redis/RedisCatalogChangeSource.java:18`
 - clase 'AccountResource' con baja cohesión (11%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
 - clase 'UserVM' con baja cohesión (30%) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:51`
@@ -213,9 +209,9 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 - método 'ExceptionTranslator.getCustomizedErrorDetails' con complejidad 6 — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:202`
 
 **OCP/type-switch** (6)
-- clase 'Professional' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:15`
-- clase 'ProfessionalCategory' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:15`
-- clase 'WeeklySchedule' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:20`
+- clase 'Professional' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/Professional.java:19`
+- clase 'ProfessionalCategory' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/ProfessionalCategory.java:19`
+- clase 'WeeklySchedule' con 1 type-checks — `src/main/java/ar/edu/um/turnos/catalog/repository/entity/WeeklySchedule.java:26`
 - clase 'SecurityUtils' con 5 type-checks — `src/main/java/ar/edu/um/turnos/catalog/security/SecurityUtils.java:21`
 - clase 'AccountResource' con 2 type-checks — `src/main/java/ar/edu/um/turnos/catalog/web/rest/AccountResource.java:21`
 - clase 'ExceptionTranslator' con 19 type-checks — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ExceptionTranslator.java:47`
@@ -225,45 +221,23 @@ El análisis encontró las siguientes señales, con el archivo y la línea donde
 - clase 'ErrorConstants' con 5 campos públicos (encapsulación) — `src/main/java/ar/edu/um/turnos/catalog/web/rest/errors/ErrorConstants.java:5`
 
 **duplicación** (6)
-- duplicación lógica: 4.3% · boilerplate: 11.2%
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:80, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:56, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:60 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:80`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:157, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:107, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:111 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:157`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:158, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:108, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:112 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:158`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:170, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:120, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:124 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:170`
-- bloque de 8 líneas repetido 3 veces en src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:171, src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:121, src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:125 — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:171`
-
-**hexagonal** (20)
-- domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:3`
-- domain importa framework/infra: import jakarta.persistence.Column; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:4`
-- domain importa framework/infra: import jakarta.persistence.EntityListeners; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:5`
-- domain importa framework/infra: import jakarta.persistence.MappedSuperclass; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:6`
-- domain importa framework/infra: import org.springframework.data.annotation.CreatedBy; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:10`
-- domain importa framework/infra: import org.springframework.data.annotation.CreatedDate; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:11`
-- domain importa framework/infra: import org.springframework.data.annotation.LastModifiedBy; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:12`
-- domain importa framework/infra: import org.springframework.data.annotation.LastModifiedDate; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:13`
-- domain importa framework/infra: import org.springframework.data.jpa.domain.support.AuditingEntityListener; — `src/main/java/ar/edu/um/turnos/catalog/domain/AbstractAuditingEntity.java:14`
-- domain importa framework/infra: import jakarta.persistence.Column; — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:3`
-- domain importa framework/infra: import jakarta.persistence.Entity; — `src/main/java/ar/edu/um/turnos/catalog/domain/CatalogSyncState.java:4`
-- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:3`
-- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/Professional.java:4`
-- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:3`
-- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/ProfessionalCategory.java:4`
-- domain importa framework/infra: import com.fasterxml.jackson.annotation.JsonIgnoreProperties; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:4`
-- domain importa framework/infra: import jakarta.persistence.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:5`
-- domain importa framework/infra: import jakarta.validation.constraints.*; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:6`
-- domain importa framework/infra: import org.hibernate.annotations.JdbcTypeCode; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:11`
-- domain importa framework/infra: import org.hibernate.type.SqlTypes; — `src/main/java/ar/edu/um/turnos/catalog/domain/WeeklySchedule.java:12`
+- duplicación lógica: 2.5% · boilerplate: 9.2%
+- bloque de 8 líneas repetido 2 veces en src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:57, src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:51 — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:57`
+- bloque de 8 líneas repetido 2 veces en src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:58, src/main/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshot.java:52 — `src/main/java/ar/edu/um/turnos/catalog/sync/infrastructure/catedra/CatalogSnapshotResponse.java:58`
+- bloque de 8 líneas repetido 2 veces en src/test/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplicaIT.java:173, src/test/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshotTest.java:44 — `src/test/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplicaIT.java:173`
+- bloque de 8 líneas repetido 2 veces en src/test/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplicaIT.java:174, src/test/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshotTest.java:45 — `src/test/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplicaIT.java:174`
+- bloque de 8 líneas repetido 2 veces en src/test/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplicaIT.java:175, src/test/java/ar/edu/um/turnos/catalog/sync/domain/CatalogSnapshotTest.java:46 — `src/test/java/ar/edu/um/turnos/catalog/sync/infrastructure/persistence/JpaCatalogReplicaIT.java:175`
 
 ## 6. Evolución por commit
 
-Métricas calculadas sobre el estado de `main` en **cada commit** (19 commits con trabajo), del primero al último. La calidad usa el perfil `exigente`; el aporte de código lo mide RepoSense. El índice puede **bajar** al crecer el proyecto: se acumulan señales.
+Métricas calculadas sobre el estado de `main` en **cada commit** (21 commits con trabajo), del primero al último. La calidad usa el perfil `exigente`; el aporte de código lo mide RepoSense. El índice puede **bajar** al crecer el proyecto: se acumulan señales.
 
 ```mermaid
 xychart-beta
     title "Índice de calidad a lo largo de los commits"
-    x-axis ["0602193", "f9dc0a9", "6e9665c", "e93585a", "71141bb", "0c32d88", "20df3d6", "5c01a40", "6622b5b", "2f82a2c", "b8969de", "fcc0665", "34894c8", "f3ff1f0", "0d8c330", "70e6de2", "96d524c", "7db3592", "5b5371f"]
+    x-axis ["0602193", "f9dc0a9", "6e9665c", "e93585a", "71141bb", "0c32d88", "20df3d6", "5c01a40", "6622b5b", "2f82a2c", "b8969de", "fcc0665", "34894c8", "f3ff1f0", "0d8c330", "70e6de2", "96d524c", "7db3592", "5b5371f", "309cd26", "8df24ba"]
     y-axis "Índice" 0 --> 100
-    line [0, 15, 15, 43, 43, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 45]
+    line [0, 15, 15, 43, 43, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 45, 49, 65]
 ```
 
 | # | Fecha | Commit | Autor | LOC | Índice | %POO | Duplic. | Sueltas |
@@ -287,6 +261,8 @@ xychart-beta
 | 17 | 2026-11-08 | `96d524c` | Facundo Mangione | 7,353 | 46 | 79% | 7.8% | 0 |
 | 18 | 2026-11-09 | `7db3592` | Facundo Mangione | 7,353 | 46 | 79% | 7.8% | 0 |
 | 19 | 2026-11-16 | `5b5371f` | Facundo Mangione | 6,471 | 45 | 78% | 4.3% | 0 |
+| 20 | 2026-11-18 | `309cd26` | Facundo Mangione | 6,477 | 49 | 78% | 4.3% | 0 |
+| 21 | 2026-11-19 | `8df24ba` | Ing. Daniel Quinteros | 6,100 | 65 | 76% | 2.5% | 0 |
 
 ---
 _Informe generado por la cátedra. Las dimensiones y umbrales corresponden a `calidad.py` (perfil `exigente`); el semáforo, a `CRITERIOS-CALIDAD.md`. La documentación del repositorio no se evalúa. Ante dudas, revisá el archivo señalado._
